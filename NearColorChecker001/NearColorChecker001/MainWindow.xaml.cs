@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO.IsolatedStorage;
 using System.IO;
+using Microsoft.VisualBasic.FileIO;
 
 namespace NearColorChecker001
 {
@@ -185,11 +186,11 @@ namespace NearColorChecker001
                 status.Height = 50;
                 status.Click += (sender2, evt) =>
                 {
-                    System.Diagnostics.Process.Start("explorer.exe","/select,"+item2.filename);
+                    System.Diagnostics.Process.Start("explorer.exe", "/select," + item2.filename);
                 };
                 sp.Children.Add(status);
                 var nameTextBlock = new TextBlock();
-                nameTextBlock.Text = item2.filename.Substring(TextBoxTargetFolder.Text.Length+1);
+                nameTextBlock.Text = item2.filename.Substring(TextBoxTargetFolder.Text.Length + 1);
                 nameTextBlock.TextWrapping = TextWrapping.Wrap;
                 nameTextBlock.Width = 100;
                 sp.Children.Add(nameTextBlock);
@@ -230,18 +231,25 @@ namespace NearColorChecker001
                      {
                          if (chbox.IsChecked == true)
                          {
-                             var dstFileNameBase = System.IO.Path.Combine(TextBoxTrashFolder.Text, System.IO.Path.GetFileName(item2.filename));
-                             var dstFileName = dstFileNameBase;
-                             int count = 0;
-                             while (File.Exists(dstFileName))
+                             if (Util.IsNetworkDrive(item2.filename))
                              {
-                                 var ext = System.IO.Path.GetExtension(dstFileNameBase);
-                                 var name = System.IO.Path.GetFileNameWithoutExtension(dstFileName);
-                                 var dir = System.IO.Path.GetDirectoryName(dstFileName);
-                                 dstFileName = System.IO.Path.Combine(dir, name + count.ToString() + ext);
-                                 count++;
+                                 var dstFileNameBase = System.IO.Path.Combine(TextBoxTrashFolder.Text, System.IO.Path.GetFileName(item2.filename));
+                                 var dstFileName = dstFileNameBase;
+                                 int count = 0;
+                                 while (File.Exists(dstFileName))
+                                 {
+                                     var ext = System.IO.Path.GetExtension(dstFileNameBase);
+                                     var name = System.IO.Path.GetFileNameWithoutExtension(dstFileName);
+                                     var dir = System.IO.Path.GetDirectoryName(dstFileName);
+                                     dstFileName = System.IO.Path.Combine(dir, name + count.ToString() + ext);
+                                     count++;
+                                 }
+                                 File.Move(item2.filename, dstFileName);
                              }
-                             File.Move(item2.filename, dstFileName);
+                             else
+                             {
+                                 FileSystem.DeleteFile(item2.filename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                             }
                              ListViewResult.Items.Remove(lvi);
                              var item3 = ListBoxSelect.SelectedItem;
                              if (item3 == null) return;
@@ -252,6 +260,11 @@ namespace NearColorChecker001
                      };
                 deleteEvents.Add(act);
             }
+        }
+
+        private void TextBoxTargetFolder_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (TextBoxTrashFolder != null) TextBoxTrashFolder.IsEnabled = Util.IsNetworkDrive(TextBoxTargetFolder.Text);
         }
     }
 }

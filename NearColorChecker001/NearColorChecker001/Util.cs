@@ -138,5 +138,15 @@ namespace NearColorChecker001
                 resultMap.Add(list.OrderByDescending(c => c.size).ToList());
             }
         }
+
+        internal static bool IsNetworkDrive(string path )
+        {
+            if (path.StartsWith(@"\\")) return true;
+            if (path.Length < 2) return false;
+            if (path[1] != ':') return false;
+
+            System.IO.DriveInfo drive = new System.IO.DriveInfo(path[0].ToString());
+            return drive.DriveType == System.IO.DriveType.Network;
+        }
     }
 }
