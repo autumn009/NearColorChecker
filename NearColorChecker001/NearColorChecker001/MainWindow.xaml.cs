@@ -97,11 +97,8 @@ namespace NearColorChecker001
         private List<Action> deleteEvents = new List<Action>();
         private void ButtonMove_Click(object sender, RoutedEventArgs e)
         {
-            if (TextBoxTrashFolder.Text.Length > 1
-                && TextBoxTrashFolder.Text.Length > 1
-                && char.ToLower(TextBoxTargetFolder.Text[0]) == char.ToLower(TextBoxTrashFolder.Text[0])
-                && TextBoxTargetFolder.Text[1] == ':'
-                && TextBoxTrashFolder.Text[1] == ':')
+            if (!Util.IsNetworkDrive(TextBoxTargetFolder.Text) ||
+                Util.IsSameDrive(TextBoxTargetFolder.Text, TextBoxTrashFolder.Text))
             {
                 var r = MessageBox.Show("Are you sure to move checked files?", "NearColorChecker", MessageBoxButton.YesNo);
                 if (r != MessageBoxResult.Yes) return;
@@ -251,10 +248,10 @@ namespace NearColorChecker001
                                  FileSystem.DeleteFile(item2.filename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                              }
                              ListViewResult.Items.Remove(lvi);
-                             var item3 = ListBoxSelect.SelectedItem;
-                             if (item3 == null) return;
-                             List<PictureInfo> target3 = resultMap.FirstOrDefault(c => c[0] == item3);
-                             target3.Remove(item2);
+                             //var item3 = ListBoxSelect.SelectedItem;
+                             //if (item3 == null) return;
+                             //List<PictureInfo> target3 = resultMap.FirstOrDefault(c => c[0] == item3);
+                             target.Remove(item2);
                              deleteEvents.Remove(act);
                          }
                      };
