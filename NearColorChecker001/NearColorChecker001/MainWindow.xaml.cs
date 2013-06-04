@@ -242,6 +242,7 @@ namespace NearColorChecker001
                                      count++;
                                  }
                                  File.Move(item2.filename, dstFileName);
+                                 File.SetLastWriteTime(dstFileName, DateTime.Now);
                              }
                              else
                              {
