@@ -139,7 +139,7 @@ namespace NearColorChecker001
             }
         }
 
-        internal static bool IsNetworkDrive(string path )
+        internal static bool IsNetworkDrive(string path)
         {
             if (path.StartsWith(@"\\")) return true;
             if (path.Length < 2) return false;
@@ -147,6 +147,15 @@ namespace NearColorChecker001
 
             System.IO.DriveInfo drive = new System.IO.DriveInfo(path[0].ToString());
             return drive.DriveType == System.IO.DriveType.Network;
+        }
+
+        internal static bool IsSameDrive(string path1, string path2)
+        {
+            return path1.Length > 1
+                && path2.Length > 1
+                && char.ToLower(path1[0]) == char.ToLower(path2[0])
+                && path1[1] == ':'
+                && path2[1] == ':';
         }
     }
 }
