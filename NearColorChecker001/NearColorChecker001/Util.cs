@@ -12,8 +12,8 @@ namespace NearColorChecker001
 {
     static class Constants
     {
-        internal const int ColorMapX = 4;
-        internal const int ColorMapY = 4;
+        internal const int ColorMapX = 8;
+        internal const int ColorMapY = 8;
     }
 
     class PictureInfo
@@ -133,7 +133,7 @@ namespace NearColorChecker001
                 {
                     if (calcDiffColor(a[x, y], b[x, y]) > threshold)
                     {
-                        System.Diagnostics.Debug.WriteLine("x=" + x + " y=" + y + " a=" + a[x, y].ToString() + " b" + b[x, y].ToString() + " diff=" + (Math.Abs(a[x, y].B - b[x, y].B) + Math.Abs(a[x, y].G - b[x, y].G) + Math.Abs(a[x, y].R - b[x, y].R)));
+                        //System.Diagnostics.Debug.WriteLine("x=" + x + " y=" + y + " a=" + a[x, y].ToString() + " b" + b[x, y].ToString() + " diff=" + (Math.Abs(a[x, y].B - b[x, y].B) + Math.Abs(a[x, y].G - b[x, y].G) + Math.Abs(a[x, y].R - b[x, y].R)));
                         return false;
                     }
                 }
