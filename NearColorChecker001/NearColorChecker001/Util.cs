@@ -12,8 +12,8 @@ namespace NearColorChecker001
 {
     static class Constants
     {
-        internal const int ColorMapX = 16;
-        internal const int ColorMapY = 16;
+        internal const int ColorMapX = 4;
+        internal const int ColorMapY = 4;
     }
 
     class PictureInfo
@@ -131,7 +131,11 @@ namespace NearColorChecker001
             {
                 for (int x = 0; x < Constants.ColorMapX; x++)
                 {
-                    if (calcDiffColor(a[x, y], b[x, y]) > threshold) return false;
+                    if (calcDiffColor(a[x, y], b[x, y]) > threshold)
+                    {
+                        System.Diagnostics.Debug.WriteLine("x=" + x + " y=" + y + " a=" + a[x, y].ToString() + " b" + b[x, y].ToString() + " diff=" + (Math.Abs(a[x, y].B - b[x, y].B) + Math.Abs(a[x, y].G - b[x, y].G) + Math.Abs(a[x, y].R - b[x, y].R)));
+                        return false;
+                    }
                 }
             }
             return true;
@@ -147,7 +151,12 @@ namespace NearColorChecker001
                 var list = new List<PictureInfo>();
                 foreach (var item in map.ToArray())
                 {
-                    if (!TestThreshold(target.color, item.color, threshold)) continue;
+                    var t = threshold;
+                    if (target.width < 200 || target.height < 200 || item.width < 200 || item.height < 200)
+                    {
+                        t *= 3; // boost threshold if picture is very small
+                    }
+                    if (!TestThreshold(target.color, item.color, t)) continue;
                     map.Remove(item);
                     list.Add(item);
                 }
