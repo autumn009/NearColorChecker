@@ -43,6 +43,11 @@ namespace NearColorChecker001
             }
         }
 
+        private static double calcDistance(double x0,double y0,double x1,double y1)
+        {
+            return Math.Sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1));
+        }
+
         internal static PictureInfo CalcScore(string filename)
         {
             //var waiter = new AutoResetEvent(false);
@@ -59,8 +64,8 @@ namespace NearColorChecker001
             var bmw = new WriteableBitmap(bm);
 
             //waiter.WaitOne();
-            var size = bm.PixelWidth * bm.PixelHeight * 4;
-            var buf = new byte[size];
+            var size = File.ReadAllBytes(filename).Length;
+            var buf = new byte[bm.PixelWidth * bm.PixelHeight * 4];
             //bm.StreamSource.Read(buf,0,size);
 
             bmw.CopyPixels(buf, bm.PixelWidth * 4, 0);
@@ -70,35 +75,44 @@ namespace NearColorChecker001
             pi.width = bm.PixelWidth;
             pi.height = bm.PixelHeight;
             pi.size = size;
-            long[,] b = new long[Constants.ColorMapX, Constants.ColorMapY];
-            long[,] g = new long[Constants.ColorMapX, Constants.ColorMapY];
-            long[,] r = new long[Constants.ColorMapX, Constants.ColorMapY];
+            byte[,] b = new byte[Constants.ColorMapX, Constants.ColorMapY];
+            byte[,] g = new byte[Constants.ColorMapX, Constants.ColorMapY];
+            byte[,] r = new byte[Constants.ColorMapX, Constants.ColorMapY];
             int xunit = pi.width / Constants.ColorMapX;
             int yunit = pi.height / Constants.ColorMapY;
+            int distanceBase = Math.Max(xunit,yunit);
             for (int y = 0; y < Constants.ColorMapY; y++)
             {
                 for (int x = 0; x < Constants.ColorMapX; x++)
                 {
+                    double centerX = (x+0.5) * xunit;
+                    double centerY = (y+0.5) * yunit;
+                    double rsum = 0.0, gsum = 0.0, bsum = 0.0;
                     for (int y0 = 0; y0 < yunit; y0++)
                     {
                         int i = ((y * yunit + y0) * pi.width + x * xunit) * 4;
                         for (int x0 = 0; x0 < xunit; x0++)
                         {
-                            b[x, y] += buf[i];
-                            g[x, y] += buf[i + 1];
-                            r[x, y] += buf[i + 2];
+                            double distance = calcDistance(centerX, centerY, x * xunit + x0, y * yunit + y0);
+                            double stronglevel = 1.0 - distance / distanceBase;
+                            if (stronglevel < 0.0) continue;
+                            bsum = bsum * (1.0 - stronglevel) + buf[i] * stronglevel;
+                            gsum = gsum * (1.0 - stronglevel) + buf[i + 1] * stronglevel;
+                            rsum = rsum * (1.0 - stronglevel) + buf[i + 2] * stronglevel;
                             i += 4;
                         }
                     }
+                    b[x, y] = (byte)bsum;
+                    g[x, y] = (byte)gsum;
+                    r[x, y] = (byte)rsum;
                 }
             }
 
-            long div = (pi.width / Constants.ColorMapX) * (pi.width / Constants.ColorMapY);
             for (int y = 0; y < Constants.ColorMapY; y++)
             {
                 for (int x = 0; x < Constants.ColorMapX; x++)
                 {
-                    pi.color[x, y] = Color.FromRgb((byte)(r[x, y] / div), (byte)(g[x, y] / div), (byte)(b[x, y] / div));
+                    pi.color[x, y] = Color.FromRgb(r[x, y], g[x, y], b[x, y]);
                 }
             }
             return pi;
