@@ -105,6 +105,7 @@ namespace NearColorChecker001
                     b[x, y] = (byte)bsum;
                     g[x, y] = (byte)gsum;
                     r[x, y] = (byte)rsum;
+                    //System.Diagnostics.Debug.WriteLine("b=" + b[x, y] + " g=" + g[x, y] + " r=" + r[x, y]);
                 }
             }
 
@@ -120,6 +121,7 @@ namespace NearColorChecker001
 
         private static int calcDiffColor(Color a, Color b)
         {
+            //System.Diagnostics.Debug.WriteLine("a=" + a.ToString() + " b" + b.ToString() + " diff=" + (Math.Abs(a.B - b.B) + Math.Abs(a.G - b.G) + Math.Abs(a.R - b.R)));
             return Math.Abs(a.B - b.B) + Math.Abs(a.G - b.G) + Math.Abs(a.R - b.R);
         }
 
