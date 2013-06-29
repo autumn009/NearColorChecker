@@ -12,8 +12,8 @@ namespace NearColorChecker001
 {
     static class Constants
     {
-        internal const int ColorMapX = 8;
-        internal const int ColorMapY = 8;
+        internal const int ColorMapX = 4;
+        internal const int ColorMapY = 4;
     }
 
     class PictureInfo
@@ -119,10 +119,12 @@ namespace NearColorChecker001
             return pi;
         }
 
-        private static int calcDiffColor(Color a, Color b)
+        private static bool calcDiffColor(Color a, Color b, int threshold)
         {
-            //System.Diagnostics.Debug.WriteLine("a=" + a.ToString() + " b" + b.ToString() + " diff=" + (Math.Abs(a.B - b.B) + Math.Abs(a.G - b.G) + Math.Abs(a.R - b.R)));
-            return Math.Abs(a.B - b.B) + Math.Abs(a.G - b.G) + Math.Abs(a.R - b.R);
+            //System.Diagnostics.Debug.WriteLine("a=" + a.ToString() + " b" + b.ToString() + " diffb=" + Math.Abs(a.B - b.B) +" diffg="+ Math.Abs(a.G - b.G) +" diffr=" +Math.Abs(a.R - b.R));
+            return Math.Abs(a.B - b.B) > threshold
+                || Math.Abs(a.G - b.G) > threshold
+                || Math.Abs(a.R - b.R) > threshold;
         }
 
         private static bool TestThreshold(Color[,] a, Color[,] b, int threshold)
@@ -131,7 +133,7 @@ namespace NearColorChecker001
             {
                 for (int x = 0; x < Constants.ColorMapX; x++)
                 {
-                    if (calcDiffColor(a[x, y], b[x, y]) > threshold)
+                    if (calcDiffColor(a[x, y], b[x, y],threshold/3) )
                     {
                         //System.Diagnostics.Debug.WriteLine("x=" + x + " y=" + y + " a=" + a[x, y].ToString() + " b" + b[x, y].ToString() + " diff=" + (Math.Abs(a[x, y].B - b[x, y].B) + Math.Abs(a[x, y].G - b[x, y].G) + Math.Abs(a[x, y].R - b[x, y].R)));
                         return false;
