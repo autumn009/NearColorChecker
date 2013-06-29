@@ -14,7 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO.IsolatedStorage;
 using System.IO;
-using Microsoft.VisualBasic.FileIO;
 
 namespace NearColorChecker001
 {
@@ -30,6 +29,7 @@ namespace NearColorChecker001
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Target)) TextBoxTargetFolder.Text = Properties.Settings.Default.Target;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Trash)) TextBoxTrashFolder.Text = Properties.Settings.Default.Trash;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Threshold)) TextBoxThreshold.Text = Properties.Settings.Default.Threshold;
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.FilterString)) TextBoxOutputFilter.Text = Properties.Settings.Default.FilterString;
         }
 
         private List<List<PictureInfo>> resultMap = new List<List<PictureInfo>>();
@@ -48,75 +48,85 @@ namespace NearColorChecker001
             wnd.Show();
             this.IsEnabled = false;
             ListBoxSelect.Items.Clear();
+            string filter = TextBoxOutputFilter.Text;
             Task.Run(() =>
+            {
+                try
                 {
-                    try
+                    var map = new List<PictureInfo>();
+                    int count = 0;
+                    Util.FileWalker(root, (filename) =>
                     {
-                        var map = new List<PictureInfo>();
-                        int count = 0;
-                        Util.FileWalker(root, (filename) =>
-                            {
-                                var pi = Util.CalcScore(filename);
-                                if (pi == null) return;
-                                map.Add(pi);
-                                count++;
-                                if (count % 10 == 0)
-                                {
-                                    Dispatcher.Invoke(() =>
-                                    {
-                                        TextBlockStatus.Text = count.ToString();
-                                    });
-                                }
-                            });
-                        Dispatcher.Invoke(() =>
+                        var pi = Util.CalcScore(filename);
+                        if (pi == null) return;
+                        map.Add(pi);
+                        count++;
+                        if (count % 10 == 0)
                         {
-                            TextBlockStatus.Text = "Grouping";
-                        });
-                        Util.PictureSeiri(map, resultMap, n);
-                        Dispatcher.Invoke(() =>
+                            Dispatcher.Invoke(() =>
                             {
-                                foreach (var item in resultMap.Where(c => c.Count() > 1))
-                                {
-                                    ListBoxSelect.Items.Add(item[0]);
-                                }
-                                wnd.Close();
-                                this.IsEnabled = true;
-                                TextBlockStatus.Text = "Done";
+                                TextBlockStatus.Text = count.ToString();
                             });
-                    }
-                    catch (Exception e2)
+                        }
+                    });
+                    Dispatcher.Invoke(() =>
                     {
-                        Dispatcher.Invoke(() =>
+                        TextBlockStatus.Text = "Grouping";
+                    });
+                    Util.PictureSeiri(map, resultMap, n);
+                    Dispatcher.Invoke(() =>
+                    {
+                        foreach (var item in resultMap.Where(c => c.Count() > 1 && (filter.Length == 0 || c.Any(d => d.filename.Contains(filter)))))
                         {
-                            TextBlockStatus.Text = e2.ToString();
-                        });
-                    }
-                });
+                            ListBoxSelect.Items.Add(item[0]);
+                        }
+                        wnd.Close();
+                        this.IsEnabled = true;
+                        TextBlockStatus.Text = "Done";
+                    });
+                }
+                catch (Exception e2)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        TextBlockStatus.Text = e2.ToString();
+                    });
+                }
+            });
         }
 
         private List<Action> deleteEvents = new List<Action>();
         private void ButtonMove_Click(object sender, RoutedEventArgs e)
         {
-            if (!Util.IsNetworkDrive(TextBoxTargetFolder.Text) ||
-                Util.IsSameDrive(TextBoxTargetFolder.Text, TextBoxTrashFolder.Text))
+            if (TextBoxTrashFolder.Text.Length > 1
+                && TextBoxTrashFolder.Text.Length > 1
+                && char.ToLower(TextBoxTargetFolder.Text[0]) == char.ToLower(TextBoxTrashFolder.Text[0])
+                && TextBoxTargetFolder.Text[1] == ':'
+                && TextBoxTrashFolder.Text[1] == ':')
             {
                 var r = MessageBox.Show("Are you sure to move checked files?", "NearColorChecker", MessageBoxButton.YesNo);
                 if (r != MessageBoxResult.Yes) return;
                 foreach (var item in deleteEvents.ToArray()) item();
                 Task.Run(() =>
+                {
+                    Task.Delay(1000).Wait();
+                    Dispatcher.Invoke(() =>
                     {
-                        Task.Delay(1000).Wait();
-                        Dispatcher.Invoke(() =>
-                        {
-                            if (ListBoxSelect.SelectedIndex < ListBoxSelect.Items.Count - 1)
-                                ListBoxSelect.SelectedIndex++;
-                        });
+                        if (ListBoxSelect.SelectedIndex < ListBoxSelect.Items.Count - 1)
+                            ListBoxSelect.SelectedIndex++;
                     });
+                });
             }
             else
             {
                 MessageBox.Show("You must specify same drive for two directories", "NearColorChecker");
             }
+        }
+
+        private void ButtonSkip_Click(object sender, RoutedEventArgs e)
+        {
+            if (ListBoxSelect.SelectedIndex < ListBoxSelect.Items.Count - 1)
+                ListBoxSelect.SelectedIndex++;
         }
 
         private void ButtonTargetFolderSelect_Click(object sender, RoutedEventArgs e)
@@ -146,6 +156,7 @@ namespace NearColorChecker001
             Properties.Settings.Default.Target = TextBoxTargetFolder.Text;
             Properties.Settings.Default.Trash = TextBoxTrashFolder.Text;
             Properties.Settings.Default.Threshold = TextBoxThreshold.Text;
+            Properties.Settings.Default.FilterString = TextBoxOutputFilter.Text;
             Properties.Settings.Default.Save();
         }
 
@@ -225,44 +236,32 @@ namespace NearColorChecker001
                 ListViewResult.Items.Add(lvi);
                 Action act = null;
                 act = () =>
-                     {
-                         if (chbox.IsChecked == true)
-                         {
-                             if (Util.IsNetworkDrive(item2.filename))
-                             {
-                                 var dstFileNameBase = System.IO.Path.Combine(TextBoxTrashFolder.Text, System.IO.Path.GetFileName(item2.filename));
-                                 var dstFileName = dstFileNameBase;
-                                 int count = 0;
-                                 while (File.Exists(dstFileName))
-                                 {
-                                     var ext = System.IO.Path.GetExtension(dstFileNameBase);
-                                     var name = System.IO.Path.GetFileNameWithoutExtension(dstFileName);
-                                     var dir = System.IO.Path.GetDirectoryName(dstFileName);
-                                     dstFileName = System.IO.Path.Combine(dir, name + count.ToString() + ext);
-                                     count++;
-                                 }
-                                 File.Move(item2.filename, dstFileName);
-                                 File.SetLastWriteTime(dstFileName, DateTime.Now);
-                             }
-                             else
-                             {
-                                 FileSystem.DeleteFile(item2.filename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-                             }
-                             ListViewResult.Items.Remove(lvi);
-                             //var item3 = ListBoxSelect.SelectedItem;
-                             //if (item3 == null) return;
-                             //List<PictureInfo> target3 = resultMap.FirstOrDefault(c => c[0] == item3);
-                             target.Remove(item2);
-                             deleteEvents.Remove(act);
-                         }
-                     };
+                {
+                    if (chbox.IsChecked == true)
+                    {
+                        var dstFileNameBase = System.IO.Path.Combine(TextBoxTrashFolder.Text, System.IO.Path.GetFileName(item2.filename));
+                        var dstFileName = dstFileNameBase;
+                        int count = 0;
+                        while (File.Exists(dstFileName))
+                        {
+                            var ext = System.IO.Path.GetExtension(dstFileNameBase);
+                            var name = System.IO.Path.GetFileNameWithoutExtension(dstFileName);
+                            var dir = System.IO.Path.GetDirectoryName(dstFileName);
+                            dstFileName = System.IO.Path.Combine(dir, name + count.ToString() + ext);
+                            count++;
+                        }
+                        File.Move(item2.filename, dstFileName);
+                        ListViewResult.Items.Remove(lvi);
+                        var item3 = ListBoxSelect.SelectedItem;
+                        if (item3 == null) return;
+                        List<PictureInfo> target3 = resultMap.FirstOrDefault(c => c[0] == item3);
+                        target3.Remove(item2);
+                        deleteEvents.Remove(act);
+                    }
+                };
                 deleteEvents.Add(act);
             }
         }
 
-        private void TextBoxTargetFolder_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (TextBoxTrashFolder != null) TextBoxTrashFolder.IsEnabled = Util.IsNetworkDrive(TextBoxTargetFolder.Text);
-        }
     }
 }
