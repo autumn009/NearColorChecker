@@ -3,16 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525" Closed="Window_Closed">
     <Grid>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Target:"></TextBlock>
-                <TextBox Width="200" VerticalAlignment="Top" x:Name="TextBoxTargetFolder" TextChanged="TextBoxTargetFolder_TextChanged">c:\pictures</TextBox>
-                <Button Content="..." VerticalAlignment="Top" x:Name="ButtonTargetFolderSelect" Click="ButtonTargetFolderSelect_Click"></Button>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Target:"></TextBlock>
+            <TextBox Width="200" VerticalAlignment="Top" x:Name="TextBoxTargetFolder">c:\pictures</TextBox>
+            <Button Content="..." VerticalAlignment="Top" x:Name="ButtonTargetFolderSelect" Click="ButtonTargetFolderSelect_Click"></Button>
             <TextBlock Text="Trash:"></TextBlock>
             <TextBox Width="200" VerticalAlignment="Top" x:Name="TextBoxTrashFolder">c:\delme</TextBox>
             <Button Content="..." VerticalAlignment="Top" x:Name="ButtonTrashFolderSelect" Click="ButtonTrashFolderSelect_Click"></Button>
         </StackPanel>
-            <ListBox Margin="0,24,0,0" Width="100" HorizontalAlignment="Left" x:Name="ListBoxSelect" SelectionChanged="ListBoxSelect_SelectionChanged">
-            </ListBox>
+        <ListBox Margin="0,24,0,0" Width="100" HorizontalAlignment="Left" x:Name="ListBoxSelect" SelectionChanged="ListBoxSelect_SelectionChanged">
+        </ListBox>
         <ListView HorizontalAlignment="Left" VerticalAlignment="Stretch"  Margin="110,24,0,0" Width="300" x:Name="ListViewResult">
             <ListView.View>
                 <GridView>
@@ -24,11 +24,14 @@
         </Button>
         <TextBlock Text="Threshold:" Margin="420,80,0,60" ></TextBlock>
         <TextBox Margin="420,100,20,60" VerticalAlignment="Top" Text="100" x:Name="TextBoxThreshold" ></TextBox>
-        
-        
-        
-        <TextBlock x:Name="TextBlockStatus" Text="Ready" Margin="420,24,0,70" VerticalAlignment="Bottom" TextWrapping="Wrap"></TextBlock>
-       
+        <TextBlock Text="Output Filter:" Margin="420,130,0,60" ></TextBlock>
+        <TextBox Margin="420,150,20,60" VerticalAlignment="Top" Text="" x:Name="TextBoxOutputFilter" ></TextBox>
+
+
+
+        <TextBlock x:Name="TextBlockStatus" Text="Ready" Margin="420,24,0,120" VerticalAlignment="Bottom" TextWrapping="Wrap"></TextBlock>
+        <Button Content="Skip This" Margin="420,24,0,54" Height="50" VerticalAlignment="Bottom" x:Name="ButtonSkip" Click="ButtonSkip_Click">
+        </Button>
         <Button Content="Move Checked" Margin="420,24,0,0" Height="50" VerticalAlignment="Bottom" x:Name="ButtonMove" Click="ButtonMove_Click">
         </Button>
     </Grid>
