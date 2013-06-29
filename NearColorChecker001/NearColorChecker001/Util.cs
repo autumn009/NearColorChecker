@@ -121,7 +121,7 @@ namespace NearColorChecker001
 
         private static bool calcDiffColor(Color a, Color b, int threshold)
         {
-            //System.Diagnostics.Debug.WriteLine("a=" + a.ToString() + " b" + b.ToString() + " diffb=" + Math.Abs(a.B - b.B) +" diffg="+ Math.Abs(a.G - b.G) +" diffr=" +Math.Abs(a.R - b.R));
+            System.Diagnostics.Debug.WriteLine("a=" + a.ToString() + " b" + b.ToString() + " diffb=" + Math.Abs(a.B - b.B) + " diffg=" + Math.Abs(a.G - b.G) + " diffr=" + Math.Abs(a.R - b.R) + " thresold=" + threshold);
             return Math.Abs(a.B - b.B) > threshold
                 || Math.Abs(a.G - b.G) > threshold
                 || Math.Abs(a.R - b.R) > threshold;
@@ -156,7 +156,7 @@ namespace NearColorChecker001
                     var t = threshold;
                     if (target.width < 200 || target.height < 200 || item.width < 200 || item.height < 200)
                     {
-                        t *= 3; // boost threshold if picture is very small
+                        //t *= 3; // boost threshold if picture is very small
                     }
                     if (!TestThreshold(target.color, item.color, t)) continue;
                     map.Remove(item);
