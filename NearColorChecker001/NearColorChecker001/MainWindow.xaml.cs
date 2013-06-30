@@ -173,10 +173,6 @@ namespace NearColorChecker001
             {
                 var lvi = new ListViewItem();
                 lvi.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-                lvi.SizeChanged += (sender2, evt) =>
-                {
-                    int x = 123;
-                };
                 //var spf = new StackPanel();
                 //spf.Orientation = Orientation.Horizontal;
                 var spf = new Grid();
