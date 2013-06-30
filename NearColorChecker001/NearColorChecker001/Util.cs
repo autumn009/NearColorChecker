@@ -154,15 +154,15 @@ namespace NearColorChecker001
                 foreach (var item in map.ToArray())
                 {
                     var t = threshold;
-                    if (target.width < 200 || target.height < 200 || item.width < 200 || item.height < 200)
-                    {
+                    //if (target.width < 200 || target.height < 200 || item.width < 200 || item.height < 200)
+                    //{
                         //t *= 3; // boost threshold if picture is very small
-                    }
+                    //}
                     if (!TestThreshold(target.color, item.color, t)) continue;
                     map.Remove(item);
                     list.Add(item);
                 }
-                resultMap.Add(list.OrderByDescending(c => c.size).ToList());
+                resultMap.Add(list.OrderByDescending(c=>c.width*c.height).ThenByDescending(c => c.size).ToList());
             }
         }
 
