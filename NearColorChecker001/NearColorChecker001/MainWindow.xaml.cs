@@ -172,12 +172,21 @@ namespace NearColorChecker001
             foreach (var item2 in target)
             {
                 var lvi = new ListViewItem();
-                var spf = new StackPanel();
-                spf.Orientation = Orientation.Horizontal;
+                lvi.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                lvi.SizeChanged += (sender2, evt) =>
+                {
+                    int x = 123;
+                };
+                //var spf = new StackPanel();
+                //spf.Orientation = Orientation.Horizontal;
+                var spf = new Grid();
+                spf.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
                 var sp = new StackPanel();
                 sp.Orientation = Orientation.Vertical;
+                sp.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
                 var chbox = new CheckBox();
                 chbox.IsChecked = isFirstItem;
+                chbox.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
                 isFirstItem = true;
                 chbox.Content = string.Format("{0}x{1}", item2.width, item2.height);
                 sp.Children.Add(chbox);
@@ -188,6 +197,7 @@ namespace NearColorChecker001
                 {
                     System.Diagnostics.Process.Start(item2.filename);
                 };
+                open.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
                 sp.Children.Add(open);
                 var status = new Button();
                 status.Content = "file info";
@@ -196,11 +206,13 @@ namespace NearColorChecker001
                 {
                     System.Diagnostics.Process.Start("explorer.exe", "/select," + item2.filename);
                 };
+                status.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
                 sp.Children.Add(status);
                 var nameTextBlock = new TextBlock();
                 nameTextBlock.Text = item2.filename.Substring(TextBoxTargetFolder.Text.Length + 1);
                 nameTextBlock.TextWrapping = TextWrapping.Wrap;
                 nameTextBlock.Width = 100;
+                nameTextBlock.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
                 sp.Children.Add(nameTextBlock);
 #if DEBUG
                 var viewmap = new Button();
@@ -222,8 +234,8 @@ namespace NearColorChecker001
                 sp.Children.Add(viewmap);
 #endif
                 var img = new Image();
-                img.Width = 150;
-                img.Height = 150;
+                //img.Width = 150;
+                //img.Height = 150;
                 var bm = new BitmapImage();
                 bm.BeginInit();
                 bm.CacheOption = BitmapCacheOption.OnLoad;
@@ -263,5 +275,13 @@ namespace NearColorChecker001
             }
         }
 
+        private void ListViewResult_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var borderWidth = SystemParameters.ResizeFrameVerticalBorderWidth;
+            var scrollWidth = SystemParameters.VerticalScrollBarWidth;
+            MyGridViewColumn.Width = Math.Max(1,ListViewResult.ActualWidth - borderWidth - scrollWidth);
+            //ListViewResult.Items.Clear();
+            //deleteEvents.Clear();
+        }
     }
 }
