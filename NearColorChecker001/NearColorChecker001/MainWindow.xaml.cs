@@ -234,6 +234,7 @@ namespace NearColorChecker001
                 sp.Children.Add(viewmap);
 #endif
                 var img = new Image();
+                img.Margin = new Thickness(0, 0, 100, 0);
                 //img.Width = 150;
                 //img.Height = 150;
                 var bm = new BitmapImage();
