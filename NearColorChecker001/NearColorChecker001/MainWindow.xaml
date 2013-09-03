@@ -33,5 +33,6 @@
         <Button Content="Skip This" Margin="0,0,0,54" Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" x:Name="ButtonSkip" Click="ButtonSkip_Click" Width="97">
         </Button>
         <Button Content="Move Checked" Height="50" VerticalAlignment="Bottom" x:Name="ButtonMove" Click="ButtonMove_Click" HorizontalAlignment="Right" Width="97"/>
+        <CheckBox x:Name="DisableConfirmToDelete" Margin="0,0,0,105" HorizontalAlignment="Right" VerticalAlignment="Bottom">削除を確認しない</CheckBox>
     </Grid>
 </Window>
