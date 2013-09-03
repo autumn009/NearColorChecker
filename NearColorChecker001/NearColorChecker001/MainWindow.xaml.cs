@@ -264,7 +264,7 @@ namespace NearColorChecker001
                         var item3 = ListBoxSelect.SelectedItem;
                         if (item3 == null) return;
                         List<PictureInfo> target3 = resultMap.FirstOrDefault(c => c[0] == item3);
-                        target3.Remove(item2);
+                        if (target3 != null) target3.Remove(item2);
                         deleteEvents.Remove(act);
                     }
                 };
