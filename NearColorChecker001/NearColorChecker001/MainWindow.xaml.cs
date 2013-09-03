@@ -104,8 +104,11 @@ namespace NearColorChecker001
                 && TextBoxTargetFolder.Text[1] == ':'
                 && TextBoxTrashFolder.Text[1] == ':')
             {
-                var r = MessageBox.Show("Are you sure to move checked files?", "NearColorChecker", MessageBoxButton.YesNo);
-                if (r != MessageBoxResult.Yes) return;
+                if (DisableConfirmToDelete.IsChecked != true)
+                {
+                    var r = MessageBox.Show("Are you sure to move checked files?", "NearColorChecker", MessageBoxButton.YesNo);
+                    if (r != MessageBoxResult.Yes) return;
+                }
                 foreach (var item in deleteEvents.ToArray()) item();
                 Task.Run(() =>
                 {
