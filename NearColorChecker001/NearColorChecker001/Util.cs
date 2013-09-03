@@ -54,7 +54,10 @@ namespace NearColorChecker001
             BitmapImage bm;
             try
             {
-                bm = new BitmapImage(new Uri(filename));
+                //System.Diagnostics.Debug.WriteLine(filename);
+                var uri = new Uri("file:///" + filename.Replace("%","%25"));
+                //System.Diagnostics.Debug.WriteLine(filename);
+                bm = new BitmapImage(uri);
             }
             catch (NotSupportedException)
             {
