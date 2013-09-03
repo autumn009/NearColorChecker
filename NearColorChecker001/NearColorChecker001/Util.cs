@@ -48,18 +48,27 @@ namespace NearColorChecker001
             return Math.Sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1));
         }
 
+        internal static Uri CreateFileUri(string filename)
+        {
+            //System.Diagnostics.Debug.WriteLine(filename);
+            var uri = new Uri("file:///" + filename.Replace("%", "%25"));
+            //System.Diagnostics.Debug.WriteLine(filename);
+            return uri;
+        }
+
         internal static PictureInfo CalcScore(string filename)
         {
             //var waiter = new AutoResetEvent(false);
             BitmapImage bm;
             try
             {
-                //System.Diagnostics.Debug.WriteLine(filename);
-                var uri = new Uri("file:///" + filename.Replace("%","%25"));
-                //System.Diagnostics.Debug.WriteLine(filename);
-                bm = new BitmapImage(uri);
+                bm = new BitmapImage(CreateFileUri(filename));
             }
             catch (NotSupportedException)
+            {
+                return null;
+            }
+            catch (FileFormatException)
             {
                 return null;
             }
