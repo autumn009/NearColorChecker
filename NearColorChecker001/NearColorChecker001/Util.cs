@@ -43,7 +43,7 @@ namespace NearColorChecker001
             }
         }
 
-        private static double calcDistance(double x0,double y0,double x1,double y1)
+        private static double calcDistance(double x0, double y0, double x1, double y1)
         {
             return Math.Sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1));
         }
@@ -92,13 +92,13 @@ namespace NearColorChecker001
             byte[,] r = new byte[Constants.ColorMapX, Constants.ColorMapY];
             int xunit = pi.width / Constants.ColorMapX;
             int yunit = pi.height / Constants.ColorMapY;
-            int distanceBase = Math.Max(xunit,yunit);
+            int distanceBase = Math.Max(xunit, yunit);
             for (int y = 0; y < Constants.ColorMapY; y++)
             {
                 for (int x = 0; x < Constants.ColorMapX; x++)
                 {
-                    double centerX = (x+0.5) * xunit;
-                    double centerY = (y+0.5) * yunit;
+                    double centerX = (x + 0.5) * xunit;
+                    double centerY = (y + 0.5) * yunit;
                     double rsum = 0.0, gsum = 0.0, bsum = 0.0;
                     for (int y0 = 0; y0 < yunit; y0++)
                     {
@@ -145,7 +145,7 @@ namespace NearColorChecker001
             {
                 for (int x = 0; x < Constants.ColorMapX; x++)
                 {
-                    if (calcDiffColor(a[x, y], b[x, y],threshold/3) )
+                    if (calcDiffColor(a[x, y], b[x, y], threshold / 3))
                     {
                         //System.Diagnostics.Debug.WriteLine("x=" + x + " y=" + y + " a=" + a[x, y].ToString() + " b" + b[x, y].ToString() + " diff=" + (Math.Abs(a[x, y].B - b[x, y].B) + Math.Abs(a[x, y].G - b[x, y].G) + Math.Abs(a[x, y].R - b[x, y].R)));
                         return false;
@@ -168,13 +168,13 @@ namespace NearColorChecker001
                     var t = threshold;
                     //if (target.width < 200 || target.height < 200 || item.width < 200 || item.height < 200)
                     //{
-                        //t *= 3; // boost threshold if picture is very small
+                    //t *= 3; // boost threshold if picture is very small
                     //}
                     if (!TestThreshold(target.color, item.color, t)) continue;
                     map.Remove(item);
                     list.Add(item);
                 }
-                resultMap.Add(list.OrderByDescending(c=>c.width*c.height).ThenByDescending(c => c.size).ToList());
+                resultMap.Add(list.OrderByDescending(c => c.width * c.height).ThenByDescending(c => c.size).ToList());
             }
         }
 
@@ -195,6 +195,13 @@ namespace NearColorChecker001
                 && char.ToLower(path1[0]) == char.ToLower(path2[0])
                 && path1[1] == ':'
                 && path2[1] == ':';
+        }
+
+        internal static bool IsMonoTone(Color col, int threshold)
+        {
+            return Math.Abs(col.B - col.G) < threshold &&
+                Math.Abs(col.G - col.R) < threshold &&
+                Math.Abs(col.R - col.B) < threshold;
         }
     }
 }
