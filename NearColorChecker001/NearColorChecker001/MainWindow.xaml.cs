@@ -236,7 +236,7 @@ namespace NearColorChecker001
                 var bm = new BitmapImage();
                 bm.BeginInit();
                 bm.CacheOption = BitmapCacheOption.OnLoad;
-                bm.UriSource = new Uri(item2.filename);
+                bm.UriSource = Util.CreateFileUri(item2.filename);
                 bm.EndInit();
                 img.Source = bm;
                 spf.Children.Add(img);
