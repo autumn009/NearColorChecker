@@ -30,6 +30,7 @@ namespace NearColorChecker001
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Trash)) TextBoxTrashFolder.Text = Properties.Settings.Default.Trash;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Threshold)) TextBoxThreshold.Text = Properties.Settings.Default.Threshold;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.FilterString)) TextBoxOutputFilter.Text = Properties.Settings.Default.FilterString;
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.MonoThreshold)) TextBoxMonoThreathold.Text = Properties.Settings.Default.MonoThreshold;
         }
 
         private List<List<PictureInfo>> resultMap = new List<List<PictureInfo>>();
@@ -41,6 +42,12 @@ namespace NearColorChecker001
             if (!int.TryParse(TextBoxThreshold.Text, out n))
             {
                 MessageBox.Show("Invalid Threshold Value");
+                return;
+            }
+            int monoThreashold;
+            if (!int.TryParse(TextBoxMonoThreathold.Text, out monoThreashold))
+            {
+                MessageBox.Show("Invalid MonoThreshold Value");
                 return;
             }
             var wnd = new WorkingWindow();
@@ -76,7 +83,7 @@ namespace NearColorChecker001
                     Util.PictureSeiri(map, resultMap, n);
                     Dispatcher.Invoke(() =>
                     {
-                        foreach (var item in resultMap.Where(c => c.Count() > 1 && (filter.Length == 0 || c.Any(d => d.filename.Contains(filter)))))
+                        foreach (var item in resultMap.Where(c => c.Count() > 1 && !Util.IsMonoTone(c[0].color[0,0],monoThreashold) && (filter.Length == 0 || c.Any(d => d.filename.Contains(filter)))))
                         {
                             ListBoxSelect.Items.Add(item[0]);
                         }
@@ -160,6 +167,7 @@ namespace NearColorChecker001
             Properties.Settings.Default.Trash = TextBoxTrashFolder.Text;
             Properties.Settings.Default.Threshold = TextBoxThreshold.Text;
             Properties.Settings.Default.FilterString = TextBoxOutputFilter.Text;
+            Properties.Settings.Default.MonoThreshold = TextBoxMonoThreathold.Text;
             Properties.Settings.Default.Save();
         }
 
