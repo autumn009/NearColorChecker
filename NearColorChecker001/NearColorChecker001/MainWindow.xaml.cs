@@ -86,7 +86,7 @@ namespace NearColorChecker001
 #if false
                         foreach (var item in resultMap)
 #else
-                        foreach (var item in resultMap.Where(c => c.Count() > 1 && !Util.IsMonoToneAll(c[0], monoThreashold) && (filter.Length == 0 || c.Any(d => d.filename.Contains(filter)))))
+                        foreach (var item in resultMap.Where(c => c.Count() > 1 && !Util.IsMonoToneAll(c[0], monoThreashold) && (filter.Length == 0 || c.Any(d => d.filename.Contains(filter))) ))
 #endif
                         {
                             ListBoxSelect.Items.Add(item[0]);
