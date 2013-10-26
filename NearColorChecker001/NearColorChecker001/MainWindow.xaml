@@ -23,7 +23,7 @@
         <Button Content="Search.." Margin="0,24,0,0" Height="50" VerticalAlignment="Top" x:Name="ButtonSearch" Click="ButtonSearch_Click" HorizontalAlignment="Right" Width="97">
         </Button>
         <TextBlock Text="Threshold:" Margin="0,80,10,219" HorizontalAlignment="Right" ></TextBlock>
-        <TextBox Margin="420,100,10,60" VerticalAlignment="Top" HorizontalAlignment="Right" Text="100" x:Name="TextBoxThreshold"  Width="80"></TextBox>
+        <TextBox Margin="420,100,10,60" VerticalAlignment="Top" HorizontalAlignment="Right" Text="30" x:Name="TextBoxThreshold"  Width="80"></TextBox>
         <TextBlock Text="Output Filter:" Margin="420,130,10,60" HorizontalAlignment="Right"  ></TextBlock>
         <TextBox Margin="420,150,10,60" VerticalAlignment="Top" Text="" HorizontalAlignment="Right" Width="80" x:Name="TextBoxOutputFilter" ></TextBox>
         <TextBlock Text="MonoThrethold" Margin="420,170,10,60" HorizontalAlignment="Right"  ></TextBlock>
