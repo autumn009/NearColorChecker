@@ -87,9 +87,9 @@ namespace NearColorChecker001
             pi.width = bm.PixelWidth;
             pi.height = bm.PixelHeight;
             pi.size = size;
-            byte[,] b = new byte[Constants.ColorMapX, Constants.ColorMapY];
-            byte[,] g = new byte[Constants.ColorMapX, Constants.ColorMapY];
-            byte[,] r = new byte[Constants.ColorMapX, Constants.ColorMapY];
+            double[,] b = new double[Constants.ColorMapX, Constants.ColorMapY];
+            double[,] g = new double[Constants.ColorMapX, Constants.ColorMapY];
+            double[,] r = new double[Constants.ColorMapX, Constants.ColorMapY];
             int xunit = pi.width / Constants.ColorMapX;
             int yunit = pi.height / Constants.ColorMapY;
             double distanceBaseX = xunit;
@@ -123,18 +123,21 @@ namespace NearColorChecker001
                             i += 4;
                         }
                     }
-                    b[x, y] = (byte)(bsum / (xunit * yunit));
-                    g[x, y] = (byte)(gsum / (xunit * yunit));
-                    r[x, y] = (byte)(rsum / (xunit * yunit));
+                    b[x, y] = bsum;
+                    g[x, y] = gsum;
+                    r[x, y] = rsum;
                     //System.Diagnostics.Debug.WriteLine("b=" + b[x, y] + " g=" + g[x, y] + " r=" + r[x, y]);
                 }
             }
 
+            var max = Math.Max(r.Cast<double>().Max(), Math.Max(g.Cast<double>().Max(), b.Cast<double>().Max()));
+            var min = Math.Min(r.Cast<double>().Min(), Math.Max(g.Cast<double>().Min(), b.Cast<double>().Min()));
+            Func<double, byte> normalize = (v) => (byte)((v - min) * 255 / (max-min));
             for (int y = 0; y < Constants.ColorMapY; y++)
             {
                 for (int x = 0; x < Constants.ColorMapX; x++)
                 {
-                    pi.color[x, y] = Color.FromRgb(r[x, y], g[x, y], b[x, y]);
+                    pi.color[x, y] = Color.FromRgb(normalize(r[x,y]),normalize(g[x,y]),normalize(b[x,y]));
                 }
             }
             return pi;
