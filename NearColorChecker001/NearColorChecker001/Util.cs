@@ -182,12 +182,17 @@ namespace NearColorChecker001
                     //{
                     //t *= 3; // boost threshold if picture is very small
                     //}
-                    if (!TestThreshold(target.color, item.color, t)) continue;
+                    if (!TestThreshold(target.color, item.color, t)|| aspectCheck(target,item)) continue;
                     map.Remove(item);
                     list.Add(item);
                 }
                 resultMap.Add(list.OrderByDescending(c => c.width * c.height).ThenByDescending(c => c.size).ToList());
             }
+        }
+
+        private static bool aspectCheck(PictureInfo target, PictureInfo item)
+        {
+            return Math.Abs(target.width / (double)target.height - item.width / (double)item.height) >= 0.01;
         }
 
         internal static bool IsNetworkDrive(string path)
@@ -250,6 +255,5 @@ namespace NearColorChecker001
             }
             return bm;
         }
-
     }
 }
