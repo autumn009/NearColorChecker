@@ -92,7 +92,8 @@ namespace NearColorChecker001
             byte[,] r = new byte[Constants.ColorMapX, Constants.ColorMapY];
             int xunit = pi.width / Constants.ColorMapX;
             int yunit = pi.height / Constants.ColorMapY;
-            int distanceBase = Math.Max(xunit, yunit);
+            double distanceBaseX = xunit;
+            double distanceBaseY = yunit;
             for (int y = 0; y < Constants.ColorMapY; y++)
             {
                 for (int x = 0; x < Constants.ColorMapX; x++)
@@ -105,18 +106,26 @@ namespace NearColorChecker001
                         int i = ((y * yunit + y0) * pi.width + x * xunit) * 4;
                         for (int x0 = 0; x0 < xunit; x0++)
                         {
-                            double distance = calcDistance(centerX, centerY, x * xunit + x0, y * yunit + y0);
-                            double stronglevel = 1.0 - distance / distanceBase;
+                            double distance = calcDistance(centerX / distanceBaseX,
+                                centerY / distanceBaseY,
+                                (x * xunit + x0) / distanceBaseX,
+                                (y * yunit + y0) / distanceBaseY);
+                            double stronglevel = distance;
+                            //System.Diagnostics.Debug.WriteLine(stronglevel.ToString());
+                            //System.Diagnostics.Debug.Write(distance.ToString());
+                            //System.Diagnostics.Debug.Write(" ");
+                            //System.Diagnostics.Debug.WriteLine(string.Format("{0} {1} {2} {3}={4}", centerX / distanceBaseX, centerY / distanceBaseY, (x * xunit + x0) / distanceBaseX, (y * yunit + y0) / distanceBaseY, distance));
                             if (stronglevel < 0.0) continue;
-                            bsum = bsum * (1.0 - stronglevel) + buf[i] * stronglevel;
-                            gsum = gsum * (1.0 - stronglevel) + buf[i + 1] * stronglevel;
-                            rsum = rsum * (1.0 - stronglevel) + buf[i + 2] * stronglevel;
+                            if (stronglevel > 1.0) continue;
+                            bsum = bsum + (255 - (255 - buf[i]) * stronglevel);
+                            gsum = gsum + (255 - (255 - buf[i + 1]) * stronglevel);
+                            rsum = rsum + (255 - (255 - buf[i + 2]) * stronglevel);
                             i += 4;
                         }
                     }
-                    b[x, y] = (byte)bsum;
-                    g[x, y] = (byte)gsum;
-                    r[x, y] = (byte)rsum;
+                    b[x, y] = (byte)(bsum / (xunit * yunit));
+                    g[x, y] = (byte)(gsum / (xunit * yunit));
+                    r[x, y] = (byte)(rsum / (xunit * yunit));
                     //System.Diagnostics.Debug.WriteLine("b=" + b[x, y] + " g=" + g[x, y] + " r=" + r[x, y]);
                 }
             }
