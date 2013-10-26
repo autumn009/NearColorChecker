@@ -83,10 +83,10 @@ namespace NearColorChecker001
                     Util.PictureSeiri(map, resultMap, n);
                     Dispatcher.Invoke(() =>
                     {
-#if DEBUG
+#if false
                         foreach (var item in resultMap)
 #else
-                        foreach (var item in resultMap.Where(c => c.Count() > 1 && !Util.IsMonoTone(c[0].color[0, 0], monoThreashold) && (filter.Length == 0 || c.Any(d => d.filename.Contains(filter)))))
+                        foreach (var item in resultMap.Where(c => c.Count() > 1 && !Util.IsMonoToneAll(c[0], monoThreashold) && (filter.Length == 0 || c.Any(d => d.filename.Contains(filter)))))
 #endif
                         {
                             ListBoxSelect.Items.Add(item[0]);
