@@ -212,6 +212,17 @@ namespace NearColorChecker001
                 Math.Abs(col.G - col.R) < threshold &&
                 Math.Abs(col.R - col.B) < threshold;
         }
+        internal static bool IsMonoToneAll(PictureInfo pictureInfo, int monoThreashold)
+        {
+            for (int y = 0; y < pictureInfo.color.GetLength(1); y++)
+            {
+                for (int x = 0; x < pictureInfo.color.GetLength(0); x++)
+                {
+                    if (!IsMonoTone(pictureInfo.color[x,y],monoThreashold)) return false;
+                }
+            }
+            return true;
+        }
 
         internal static WriteableBitmap GetMosaicPicture(PictureInfo info)
         {
@@ -236,5 +247,6 @@ namespace NearColorChecker001
             }
             return bm;
         }
+
     }
 }
