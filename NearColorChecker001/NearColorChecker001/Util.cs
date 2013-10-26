@@ -203,5 +203,19 @@ namespace NearColorChecker001
                 Math.Abs(col.G - col.R) < threshold &&
                 Math.Abs(col.R - col.B) < threshold;
         }
+
+        internal static WriteableBitmap GetMosaicPicture(PictureInfo info)
+        {
+            var bm = new WriteableBitmap(info.color.GetLength(0), info.color.GetLength(1), 96, 96, PixelFormats.Bgr24, null);
+            for (int y = 0; y < info.color.GetLength(1); y++)
+            {
+                for (int x = 0; x < info.color.GetLength(0); x++)
+                {
+                    byte[] col = { info.color[x, y].B, info.color[x, y].G, info.color[x, y].R, info.color[x, y].A };
+                    bm.WritePixels(new System.Windows.Int32Rect(x, y, 1, 1), col, 4, 0);
+                }
+            }
+            return bm;
+        }
     }
 }
