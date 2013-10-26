@@ -142,7 +142,7 @@ namespace NearColorChecker001
 
         private static bool calcDiffColor(Color a, Color b, int threshold)
         {
-            System.Diagnostics.Debug.WriteLine("a=" + a.ToString() + " b" + b.ToString() + " diffb=" + Math.Abs(a.B - b.B) + " diffg=" + Math.Abs(a.G - b.G) + " diffr=" + Math.Abs(a.R - b.R) + " thresold=" + threshold);
+            //System.Diagnostics.Debug.WriteLine("a=" + a.ToString() + " b" + b.ToString() + " diffb=" + Math.Abs(a.B - b.B) + " diffg=" + Math.Abs(a.G - b.G) + " diffr=" + Math.Abs(a.R - b.R) + " thresold=" + threshold);
             return Math.Abs(a.B - b.B) > threshold
                 || Math.Abs(a.G - b.G) > threshold
                 || Math.Abs(a.R - b.R) > threshold;
