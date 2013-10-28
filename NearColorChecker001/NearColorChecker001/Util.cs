@@ -19,6 +19,7 @@ namespace NearColorChecker001
     class PictureInfo
     {
         internal Color[,] color;
+        internal Color[,] colorDiff;
         internal string filename;
         internal int width;
         internal int height;
@@ -73,20 +74,42 @@ namespace NearColorChecker001
                 return null;
             }
             bm.CacheOption = BitmapCacheOption.OnLoad;
+            var pi = new PictureInfo();
+            pi.filename = filename;
+            pi.width = bm.PixelWidth;
+            pi.height = bm.PixelHeight;
+            pi.size = File.ReadAllBytes(filename).Length;
+            pi.color = CalcScoreSub(/*filename,*/ bm, pi);
+            WriteableBitmap mono = createMono(bm, pi);
+            WriteableBitmap diff = createDiff(mono, pi);
+            pi.colorDiff = CalcScoreSub(/*filename,*/ diff, pi);
+            return pi;
+        }
+
+        private static WriteableBitmap createDiff(WriteableBitmap bm, PictureInfo pi)
+        {
+            var bmw = new WriteableBitmap(bm);
+            // TBW
+            return bmw;
+        }
+
+        private static WriteableBitmap createMono(BitmapImage bm, PictureInfo pi)
+        {
+            var bmw = new WriteableBitmap(bm);
+            // TBW
+            return bmw;
+        }
+
+        private static Color[,] CalcScoreSub(/*string filename,*/ BitmapSource bm, PictureInfo pi)
+        {
             var bmw = new WriteableBitmap(bm);
 
             //waiter.WaitOne();
-            var size = File.ReadAllBytes(filename).Length;
             var buf = new byte[bm.PixelWidth * bm.PixelHeight * 4];
             //bm.StreamSource.Read(buf,0,size);
 
             bmw.CopyPixels(buf, bm.PixelWidth * 4, 0);
 
-            var pi = new PictureInfo();
-            pi.filename = filename;
-            pi.width = bm.PixelWidth;
-            pi.height = bm.PixelHeight;
-            pi.size = size;
             double[,] b = new double[Constants.ColorMapX, Constants.ColorMapY];
             double[,] g = new double[Constants.ColorMapX, Constants.ColorMapY];
             double[,] r = new double[Constants.ColorMapX, Constants.ColorMapY];
@@ -130,17 +153,18 @@ namespace NearColorChecker001
                 }
             }
 
+            var color = new Color[Constants.ColorMapX, Constants.ColorMapY];
             var max = Math.Max(r.Cast<double>().Max(), Math.Max(g.Cast<double>().Max(), b.Cast<double>().Max()));
             var min = Math.Min(r.Cast<double>().Min(), Math.Max(g.Cast<double>().Min(), b.Cast<double>().Min()));
-            Func<double, byte> normalize = (v) => (byte)((v - min) * 255 / (max-min));
+            Func<double, byte> normalize = (v) => (byte)((v - min) * 255 / (max - min));
             for (int y = 0; y < Constants.ColorMapY; y++)
             {
                 for (int x = 0; x < Constants.ColorMapX; x++)
                 {
-                    pi.color[x, y] = Color.FromRgb(normalize(r[x,y]),normalize(g[x,y]),normalize(b[x,y]));
+                    color[x, y] = Color.FromRgb(normalize(r[x, y]), normalize(g[x, y]), normalize(b[x, y]));
                 }
             }
-            return pi;
+            return color;
         }
 
         private static bool calcDiffColor(Color a, Color b, int threshold)
