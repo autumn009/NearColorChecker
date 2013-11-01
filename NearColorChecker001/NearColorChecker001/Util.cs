@@ -260,7 +260,7 @@ namespace NearColorChecker001
                     //t *= 3; // boost threshold if picture is very small
                     //}
                     if (!TestThreshold(target.color, item.color, t) || aspectCheck(target, item)) continue;
-                    if (!TestThreshold(target.colorDiff, item.colorDiff, 8) || (target.width != item.width || target.height != item.height)) continue;
+                    if (!TestThreshold(target.colorDiff, item.colorDiff, thresholdDiff) && (target.width == item.width && target.height == item.height)) continue;
                     map.Remove(item);
                     list.Add(item);
                 }
