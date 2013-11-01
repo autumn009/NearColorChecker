@@ -99,7 +99,7 @@ namespace NearColorChecker001
             {
                 for (int x = 0; x < bm.PixelWidth - 1; x++)
                 {
-                    int i = (x + y * bm.PixelHeight) * 4;
+                    int i = (x + y * bm.PixelWidth) * 4;
                     if (srcbuf[i] != srcbuf[i + 4])
                     {
                         dstbuf[i] = dstbuf[i + 1] = dstbuf[i + 2] = 0xff;
@@ -132,7 +132,7 @@ namespace NearColorChecker001
             byte maxg = calcMax(1);
             byte maxr = calcMax(2);
 
-            var bw = new WriteableBitmap((int)bm.Width, (int)bm.Height, 96, 96, PixelFormats.Bgr32, null);
+            var bw = new WriteableBitmap(bm.PixelWidth, bm.PixelHeight, 96, 96, PixelFormats.Bgr32, null);
             var dstbuf = new byte[bm.PixelWidth * bm.PixelHeight * 4];
 
             for (int i = 0; i < bm.PixelWidth * bm.PixelHeight*4; i += 4)
@@ -242,14 +242,16 @@ namespace NearColorChecker001
             return true;
         }
 
-        internal static void PictureSeiri(List<PictureInfo> map, List<List<PictureInfo>> resultMap, int threshold)
+        internal static void PictureSeiri(List<PictureInfo> map, List<List<PictureInfo>> resultMap, int threshold, int thresholdDiff)
         {
             resultMap.Clear();
             for (; ; )
             {
                 if (map.Count() == 0) return;
                 var target = map.First();
+                map.Remove(target);
                 var list = new List<PictureInfo>();
+                list.Add(target);
                 foreach (var item in map.ToArray())
                 {
                     var t = threshold;
@@ -257,7 +259,8 @@ namespace NearColorChecker001
                     //{
                     //t *= 3; // boost threshold if picture is very small
                     //}
-                    if (!TestThreshold(target.color, item.color, t)|| aspectCheck(target,item)) continue;
+                    if (!TestThreshold(target.color, item.color, t) || aspectCheck(target, item)) continue;
+                    if (!TestThreshold(target.colorDiff, item.colorDiff, 8) || (target.width != item.width || target.height != item.height)) continue;
                     map.Remove(item);
                     list.Add(item);
                 }
