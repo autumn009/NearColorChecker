@@ -19,7 +19,16 @@ namespace NearColorChecker001
     class PictureInfo
     {
         internal Color[,] color;
-        internal Color[,] colorDiff;
+        private Color[,] internalColorDiff;
+        internal Func<Color[,]> internalColorDiffGetter;
+        internal Color[,] colorDiff
+        {
+            get
+            {
+                if (internalColorDiff == null) internalColorDiff = internalColorDiffGetter();
+                return internalColorDiff;
+            }
+        }
         internal string filename;
         internal int width;
         internal int height;
@@ -80,9 +89,25 @@ namespace NearColorChecker001
             pi.height = bm.PixelHeight;
             pi.size = File.ReadAllBytes(filename).Length;
             pi.color = CalcScoreSub(/*filename,*/ bm, pi);
-            WriteableBitmap mono = CreateMono(bm);
-            WriteableBitmap diff = CreateDiff(mono);
-            pi.colorDiff = CalcScoreSub(/*filename,*/ diff, pi);
+            pi.internalColorDiffGetter = () =>
+            {
+                BitmapImage bm2;
+                try
+                {
+                    bm2 = new BitmapImage(CreateFileUri(filename));
+                }
+                catch (NotSupportedException)
+                {
+                    return new Color[Constants.ColorMapX, Constants.ColorMapY];
+                }
+                catch (FileFormatException)
+                {
+                    return new Color[Constants.ColorMapX, Constants.ColorMapY];
+                }
+                WriteableBitmap mono = CreateMono(bm2);
+                WriteableBitmap diff = CreateDiff(mono);
+                return CalcScoreSub(diff, pi);
+            };
             return pi;
         }
 
