@@ -277,11 +277,24 @@ namespace NearColorChecker001
                 spf3.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
                 var img3 = new Image();
                 img3.Margin = new Thickness(0, 0, 100, 0);
-                img3.Source = Util.CreateMono(bm);
+                var bm3 = Util.CreateMono(bm);
+                img3.Source = bm3;
                 img3.Effect = null;
                 spf3.Children.Add(img3);
                 lvi3.Content = spf3;
                 ListViewResult.Items.Add(lvi3);
+
+                var lvi4 = new ListViewItem();
+                lvi4.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                var spf4 = new Grid();
+                spf4.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                var img4 = new Image();
+                img4.Margin = new Thickness(0, 0, 100, 0);
+                img4.Source = Util.CreateDiff(bm3);
+                img4.Effect = null;
+                spf4.Children.Add(img4);
+                lvi4.Content = spf4;
+                ListViewResult.Items.Add(lvi4);
 #endif
                 Action act = null;
                 act = () =>

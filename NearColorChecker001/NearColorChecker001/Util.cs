@@ -81,16 +81,38 @@ namespace NearColorChecker001
             pi.size = File.ReadAllBytes(filename).Length;
             pi.color = CalcScoreSub(/*filename,*/ bm, pi);
             WriteableBitmap mono = CreateMono(bm);
-            WriteableBitmap diff = createDiff(mono, pi);
+            WriteableBitmap diff = CreateDiff(mono);
             pi.colorDiff = CalcScoreSub(/*filename,*/ diff, pi);
             return pi;
         }
 
-        private static WriteableBitmap createDiff(WriteableBitmap bm, PictureInfo pi)
+        public static WriteableBitmap CreateDiff(WriteableBitmap bm)
         {
             var bmw = new WriteableBitmap(bm);
-            // TBW
-            return bmw;
+            var srcbuf = new byte[bm.PixelWidth * bm.PixelHeight * 4];
+            bmw.CopyPixels(srcbuf, bm.PixelWidth * 4, 0);
+
+            var bw = new WriteableBitmap((int)bm.Width, (int)bm.Height, 96, 96, PixelFormats.Bgr32, null);
+            var dstbuf = new byte[bm.PixelWidth * bm.PixelHeight * 4];
+
+            for (int y = 0; y < bm.PixelHeight; y++)
+            {
+                for (int x = 0; x < bm.PixelWidth - 1; x++)
+                {
+                    int i = (x + y * bm.PixelHeight) * 4;
+                    if (srcbuf[i] != srcbuf[i + 4])
+                    {
+                        dstbuf[i] = dstbuf[i + 1] = dstbuf[i + 2] = 0xff;
+                    }
+                    else
+                    {
+                        dstbuf[i] = dstbuf[i + 1] = dstbuf[i + 2] = 0;
+                    }
+                    dstbuf[i + 3] = 0xff;
+                }
+            }
+            bw.WritePixels(new System.Windows.Int32Rect(0, 0, bm.PixelWidth, bm.PixelHeight), dstbuf, bm.PixelWidth * 4, 0, 0);
+            return bw;
         }
 
         public static WriteableBitmap CreateMono(BitmapImage bm)
@@ -112,7 +134,6 @@ namespace NearColorChecker001
 
             var bw = new WriteableBitmap((int)bm.Width, (int)bm.Height, 96, 96, PixelFormats.Bgr32, null);
             var dstbuf = new byte[bm.PixelWidth * bm.PixelHeight * 4];
-            bmw.CopyPixels(dstbuf, bm.PixelWidth * 4, 0);
 
             for (int i = 0; i < bm.PixelWidth * bm.PixelHeight*4; i += 4)
             {
