@@ -307,22 +307,22 @@ namespace NearColorChecker001
             return true;
         }
 
-        internal static WriteableBitmap GetMosaicPicture(PictureInfo info)
+        internal static WriteableBitmap GetMosaicPicture(Color[,] color)
         {
             const int scalefactor = 50;
-            var bm = new WriteableBitmap(info.color.GetLength(0) * scalefactor, info.color.GetLength(1) * scalefactor, 96, 96, PixelFormats.Bgr32, null);
-            for (int y = 0; y < info.color.GetLength(1); y++)
+            var bm = new WriteableBitmap(color.GetLength(0) * scalefactor, color.GetLength(1) * scalefactor, 96, 96, PixelFormats.Bgr32, null);
+            for (int y = 0; y < color.GetLength(1); y++)
             {
-                for (int x = 0; x < info.color.GetLength(0); x++)
+                for (int x = 0; x < color.GetLength(0); x++)
                 {
                     //byte[] col = { info.color[x, y].B, info.color[x, y].G, info.color[x, y].R, info.color[x, y].A };
                     byte[] col = new byte[scalefactor*scalefactor*4];
                     for (int i = 0; i < scalefactor*scalefactor*4; i+=4)
                     {
-                        col[i] = info.color[x, y].B;
-                        col[i + 1] = info.color[x, y].G;
-                        col[i + 2] = info.color[x, y].R;
-                        col[i + 3] = info.color[x, y].A;
+                        col[i] = color[x, y].B;
+                        col[i + 1] = color[x, y].G;
+                        col[i + 2] = color[x, y].R;
+                        col[i + 3] = color[x, y].A;
                     }
 
                     bm.WritePixels(new System.Windows.Int32Rect(x * scalefactor, y * scalefactor, scalefactor, scalefactor), col, 4 * scalefactor, 0);

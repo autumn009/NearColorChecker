@@ -86,7 +86,10 @@ namespace NearColorChecker001
 #if false
                         foreach (var item in resultMap)
 #else
-                        foreach (var item in resultMap.Where(c => c.Count() > 1 && !Util.IsMonoToneAll(c[0], monoThreashold) && (filter.Length == 0 || c.Any(d => d.filename.Contains(filter))) ))
+                        foreach (var item in resultMap.Where(c => c.Count() > 1 
+                            && !Util.IsMonoToneAll(c[0], monoThreashold) 
+                            && (filter.Length == 0 || c.Any(d => d.filename.Contains(filter))) )
+                            )
 #endif
                         {
                             ListBoxSelect.Items.Add(item[0]);
@@ -265,7 +268,7 @@ namespace NearColorChecker001
                 spf2.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
                 var img2 = new Image();
                 img2.Margin = new Thickness(0, 0, 100, 0);
-                img2.Source = Util.GetMosaicPicture(item2);
+                img2.Source = Util.GetMosaicPicture(item2.color);
                 img2.Effect = null;
                 spf2.Children.Add(img2);
                 lvi2.Content = spf2;
@@ -295,6 +298,18 @@ namespace NearColorChecker001
                 spf4.Children.Add(img4);
                 lvi4.Content = spf4;
                 ListViewResult.Items.Add(lvi4);
+
+                var lvi5 = new ListViewItem();
+                lvi5.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                var spf5 = new Grid();
+                spf5.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                var img5 = new Image();
+                img5.Margin = new Thickness(0, 0, 100, 0);
+                img5.Source = Util.GetMosaicPicture(item2.colorDiff);
+                img5.Effect = null;
+                spf5.Children.Add(img5);
+                lvi5.Content = spf5;
+                ListViewResult.Items.Add(lvi5);
 #endif
                 Action act = null;
                 act = () =>
