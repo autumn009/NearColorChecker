@@ -80,7 +80,7 @@ namespace NearColorChecker001
             pi.height = bm.PixelHeight;
             pi.size = File.ReadAllBytes(filename).Length;
             pi.color = CalcScoreSub(/*filename,*/ bm, pi);
-            WriteableBitmap mono = createMono(bm, pi);
+            WriteableBitmap mono = CreateMono(bm);
             WriteableBitmap diff = createDiff(mono, pi);
             pi.colorDiff = CalcScoreSub(/*filename,*/ diff, pi);
             return pi;
@@ -93,11 +93,41 @@ namespace NearColorChecker001
             return bmw;
         }
 
-        private static WriteableBitmap createMono(BitmapImage bm, PictureInfo pi)
+        public static WriteableBitmap CreateMono(BitmapImage bm)
         {
             var bmw = new WriteableBitmap(bm);
-            // TBW
-            return bmw;
+            var srcbuf = new byte[bm.PixelWidth * bm.PixelHeight * 4];
+            bmw.CopyPixels(srcbuf, bm.PixelWidth * 4, 0);
+
+            Func<int, byte> calcMax = (offset) =>
+            {
+                int max = -1;
+                for (int i = offset; i < bm.PixelWidth * bm.PixelHeight * 4; i += 4) max = Math.Max(max, srcbuf[i]);
+                return (byte)max;
+            };
+
+            byte maxb = calcMax(0);
+            byte maxg = calcMax(1);
+            byte maxr = calcMax(2);
+
+            var bw = new WriteableBitmap((int)bm.Width, (int)bm.Height, 96, 96, PixelFormats.Bgr32, null);
+            var dstbuf = new byte[bm.PixelWidth * bm.PixelHeight * 4];
+            bmw.CopyPixels(dstbuf, bm.PixelWidth * 4, 0);
+
+            for (int i = 0; i < bm.PixelWidth * bm.PixelHeight*4; i += 4)
+            {
+                if ((maxb - srcbuf[i]) < 16 && (maxg - srcbuf[i + 1]) < 16 && (maxr - srcbuf[i + 2]) < 16)
+                {
+                    dstbuf[i] = dstbuf[i + 1] = dstbuf[i + 2] = 0xff;
+                }
+                else
+                {
+                    dstbuf[i] = dstbuf[i + 1] = dstbuf[i + 2] = 0;
+                }
+                dstbuf[i + 3] = 0xff;
+            }
+            bw.WritePixels(new System.Windows.Int32Rect(0, 0, bm.PixelWidth, bm.PixelHeight), dstbuf, bm.PixelWidth * 4, 0, 0);
+            return bw;
         }
 
         private static Color[,] CalcScoreSub(/*string filename,*/ BitmapSource bm, PictureInfo pi)
