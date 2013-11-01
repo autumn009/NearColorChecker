@@ -25,12 +25,14 @@ namespace NearColorChecker001
         public MainWindow()
         {
             InitializeComponent();
-            Properties.Settings.Default.Upgrade();
+            // should not upgrade any value
+            //Properties.Settings.Default.Upgrade();
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Target)) TextBoxTargetFolder.Text = Properties.Settings.Default.Target;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Trash)) TextBoxTrashFolder.Text = Properties.Settings.Default.Trash;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Threshold)) TextBoxThreshold.Text = Properties.Settings.Default.Threshold;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.FilterString)) TextBoxOutputFilter.Text = Properties.Settings.Default.FilterString;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.MonoThreshold)) TextBoxMonoThreathold.Text = Properties.Settings.Default.MonoThreshold;
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.DiffThreshold)) TextBoxDiffThreathold.Text = Properties.Settings.Default.MonoThreshold;
         }
 
         private List<List<PictureInfo>> resultMap = new List<List<PictureInfo>>();
@@ -48,6 +50,12 @@ namespace NearColorChecker001
             if (!int.TryParse(TextBoxMonoThreathold.Text, out monoThreashold))
             {
                 MessageBox.Show("Invalid MonoThreshold Value");
+                return;
+            }
+            int diff;
+            if (!int.TryParse(TextBoxDiffThreathold.Text, out diff))
+            {
+                MessageBox.Show("Invalid DiffThreshold Value");
                 return;
             }
             var wnd = new WorkingWindow();
@@ -80,10 +88,10 @@ namespace NearColorChecker001
                     {
                         TextBlockStatus.Text = "Grouping";
                     });
-                    Util.PictureSeiri(map, resultMap, n);
+                    Util.PictureSeiri(map, resultMap, n, diff );
                     Dispatcher.Invoke(() =>
                     {
-#if false
+#if true
                         foreach (var item in resultMap)
 #else
                         foreach (var item in resultMap.Where(c => c.Count() > 1 
@@ -175,6 +183,7 @@ namespace NearColorChecker001
             Properties.Settings.Default.Threshold = TextBoxThreshold.Text;
             Properties.Settings.Default.FilterString = TextBoxOutputFilter.Text;
             Properties.Settings.Default.MonoThreshold = TextBoxMonoThreathold.Text;
+            Properties.Settings.Default.DiffThreshold = TextBoxDiffThreathold.Text;
             Properties.Settings.Default.Save();
         }
 

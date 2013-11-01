@@ -13,26 +13,29 @@
         </StackPanel>
         <ListBox Margin="0,24,0,0" Width="100" HorizontalAlignment="Left" x:Name="ListBoxSelect" SelectionChanged="ListBoxSelect_SelectionChanged">
         </ListBox>
-        <ListView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Margin="105,24,112,0" x:Name="ListViewResult" SizeChanged="ListViewResult_SizeChanged">
+        <ListView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Margin="105,24,129,0" x:Name="ListViewResult" SizeChanged="ListViewResult_SizeChanged">
             <ListView.View>
                 <GridView>
                     <GridViewColumn x:Name="MyGridViewColumn"/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button Content="Search.." Margin="0,24,0,0" Height="50" VerticalAlignment="Top" x:Name="ButtonSearch" Click="ButtonSearch_Click" HorizontalAlignment="Right" Width="97">
-        </Button>
-        <TextBlock Text="Threshold:" Margin="0,80,10,219" HorizontalAlignment="Right" ></TextBlock>
-        <TextBox Margin="420,100,10,60" VerticalAlignment="Top" HorizontalAlignment="Right" Text="30" x:Name="TextBoxThreshold"  Width="80"></TextBox>
-        <TextBlock Text="Output Filter:" Margin="420,130,10,60" HorizontalAlignment="Right"  ></TextBlock>
-        <TextBox Margin="420,150,10,60" VerticalAlignment="Top" Text="" HorizontalAlignment="Right" Width="80" x:Name="TextBoxOutputFilter" ></TextBox>
-        <TextBlock Text="MonoThrethold" Margin="420,170,10,60" HorizontalAlignment="Right"  ></TextBlock>
-        <TextBox Margin="420,190,10,60" VerticalAlignment="Top" Text="10" HorizontalAlignment="Right" Width="80" x:Name="TextBoxMonoThreathold" ></TextBox>
-
-        <TextBlock x:Name="TextBlockStatus" Text="Ready" Margin="420,24,20,120" VerticalAlignment="Bottom" HorizontalAlignment="Right"  TextWrapping="Wrap"></TextBlock>
-        <Button Content="Skip This" Margin="0,0,0,54" Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" x:Name="ButtonSkip" Click="ButtonSkip_Click" Width="97">
-        </Button>
-        <Button Content="Move Checked" Height="50" VerticalAlignment="Bottom" x:Name="ButtonMove" Click="ButtonMove_Click" HorizontalAlignment="Right" Width="97"/>
-        <CheckBox x:Name="DisableConfirmToDelete" Margin="0,0,0,105" HorizontalAlignment="Right" VerticalAlignment="Bottom">NotConfirmDelete</CheckBox>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120">
+            <Button Content="Search.." Margin="0,24,0,0" Height="50" x:Name="ButtonSearch" Click="ButtonSearch_Click"  Width="97">
+            </Button>
+            <TextBlock Text="Threshold:" ></TextBlock>
+            <TextBox Text="30" x:Name="TextBoxThreshold"  Width="80"></TextBox>
+            <TextBlock Text="MonoThrethold" ></TextBlock>
+            <TextBox Text="10" Width="80" x:Name="TextBoxMonoThreathold" ></TextBox>
+            <TextBlock Text="DiffThrethold" ></TextBlock>
+            <TextBox Text="10" Width="80" x:Name="TextBoxDiffThreathold" ></TextBox>
+            <TextBlock Text="Output Filter:" ></TextBlock>
+            <TextBox Text="" Width="80" x:Name="TextBoxOutputFilter" ></TextBox>
+            <TextBlock x:Name="TextBlockStatus" Text="Ready"  TextWrapping="Wrap"></TextBlock>
+            <CheckBox x:Name="DisableConfirmToDelete" >Disable confirm</CheckBox>
+            <Button Content="Skip This" Height="50" x:Name="ButtonSkip" Click="ButtonSkip_Click" Width="97">
+            </Button>
+            <Button Content="Move Checked" Height="50" x:Name="ButtonMove" Click="ButtonMove_Click" Width="97"/>
+        </StackPanel>
     </Grid>
 </Window>
