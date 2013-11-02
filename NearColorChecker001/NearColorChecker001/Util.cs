@@ -315,6 +315,47 @@ namespace NearColorChecker001
             return true;
         }
 
+        private static BitmapImage loadBM(string filename)
+        {
+            BitmapImage bm;
+            try
+            {
+                bm = new BitmapImage(CreateFileUri(filename));
+            }
+            catch (NotSupportedException)
+            {
+                return null;
+            }
+            catch (FileFormatException)
+            {
+                return null;
+            }
+            return bm;
+        }
+
+        private static bool exactCheck(PictureInfo target1, PictureInfo target2)
+        {
+            var t1 = loadBM(target1.filename);
+            var t2 = loadBM(target2.filename);
+            if (t1.Format.BitsPerPixel != 32 || t2.Format.BitsPerPixel != 32) return false;
+            var buf1 = new byte[t1.PixelWidth * t1.PixelHeight * 4];
+            t1.CopyPixels(buf1, t1.PixelWidth * 4, 0);
+            var buf2 = new byte[t2.PixelWidth * t2.PixelHeight * 4];
+            t2.CopyPixels(buf2, t2.PixelWidth * 4, 0);
+
+            int diffcount = 16;
+            const int limit = 1;
+            for (int i = 0; i < t1.PixelWidth * t1.PixelHeight*4; i += 4)
+            {
+                if (Math.Abs(buf1[i] - buf2[i]) < limit) continue;
+                if (Math.Abs(buf1[i + 1] - buf2[i + 1]) < limit) continue;
+                if (Math.Abs(buf1[i + 2] - buf2[i + 2]) < limit) continue;
+                diffcount++;
+            }
+
+            return diffcount == 0;
+        }
+
         internal static void PictureSeiri(List<PictureInfo> map, List<List<PictureInfo>> resultMap, int threshold, int thresholdDiff)
         {
             resultMap.Clear();
@@ -334,6 +375,7 @@ namespace NearColorChecker001
                     //}
                     if (!TestThreshold(target.color, item.color, t) || aspectCheck(target, item)) continue;
                     if (!TestThreshold(target.colorDiff, item.colorDiff, thresholdDiff) && (target.width == item.width && target.height == item.height)) continue;
+                    if (target.width == item.width && target.height == item.height && !exactCheck(target, item)) continue;
                     map.Remove(item);
                     list.Add(item);
                 }
