@@ -91,7 +91,7 @@ namespace NearColorChecker001
                     Util.PictureSeiri(map, resultMap, n, diff );
                     Dispatcher.Invoke(() =>
                     {
-#if false
+#if true
                         foreach (var item in resultMap)
 #else
                         foreach (var item in resultMap.Where(c => c.Count() > 1 
