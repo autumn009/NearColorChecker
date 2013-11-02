@@ -184,7 +184,16 @@ namespace NearColorChecker001
             var buf = new byte[bm.PixelWidth * bm.PixelHeight * 4];
             //bm.StreamSource.Read(buf,0,size);
 
-            bmw.CopyPixels(buf, bm.PixelWidth * 4, 0);
+            bool isMono = false;
+            if (bmw.Format.BitsPerPixel == 8)
+                isMono = true;
+            else if (bmw.Format.BitsPerPixel == 32)
+                isMono = false;
+            else
+                System.Diagnostics.Debug.Fail("bmw.Format.BitsPerPixel is " + bmw.Format.BitsPerPixel.ToString());
+
+            int scale = isMono ? 1 : 4;
+            bmw.CopyPixels(buf, bmw.PixelWidth * scale, 0);
 
             double[,] b = new double[Constants.ColorMapX, Constants.ColorMapY];
             double[,] g = new double[Constants.ColorMapX, Constants.ColorMapY];
@@ -202,7 +211,7 @@ namespace NearColorChecker001
                     double rsum = 0.0, gsum = 0.0, bsum = 0.0;
                     for (int y0 = 0; y0 < yunit; y0++)
                     {
-                        int i = ((y * yunit + y0) * pi.width + x * xunit) * 4;
+                        int i = ((y * yunit + y0) * pi.width + x * xunit) * scale;
                         for (int x0 = 0; x0 < xunit; x0++)
                         {
                             double distance = calcDistance(centerX / distanceBaseX,
@@ -216,10 +225,17 @@ namespace NearColorChecker001
                             //System.Diagnostics.Debug.WriteLine(string.Format("{0} {1} {2} {3}={4}", centerX / distanceBaseX, centerY / distanceBaseY, (x * xunit + x0) / distanceBaseX, (y * yunit + y0) / distanceBaseY, distance));
                             if (stronglevel < 0.0) continue;
                             if (stronglevel > 1.0) continue;
-                            bsum = bsum + (255 - (255 - buf[i]) * stronglevel);
-                            gsum = gsum + (255 - (255 - buf[i + 1]) * stronglevel);
-                            rsum = rsum + (255 - (255 - buf[i + 2]) * stronglevel);
-                            i += 4;
+                            if (isMono)
+                            {
+                                rsum = gsum = bsum = bsum + (255 - (255 - buf[i]) * stronglevel);
+                            }
+                            else
+                            {
+                                bsum = bsum + (255 - (255 - buf[i]) * stronglevel);
+                                gsum = gsum + (255 - (255 - buf[i + 1]) * stronglevel);
+                                rsum = rsum + (255 - (255 - buf[i + 2]) * stronglevel);
+                            }
+                            i += scale;
                         }
                     }
                     b[x, y] = bsum;
