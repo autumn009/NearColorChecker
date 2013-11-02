@@ -142,35 +142,66 @@ namespace NearColorChecker001
 
         public static WriteableBitmap CreateMono(BitmapImage bm)
         {
-            var bmw = new WriteableBitmap(bm);
-            var srcbuf = new byte[bm.PixelWidth * bm.PixelHeight * 4];
-            bmw.CopyPixels(srcbuf, bm.PixelWidth * 4, 0);
+            bool isMono = false;
+            if (bm.Format.BitsPerPixel == 8)
+                isMono = true;
+            else if (bm.Format.BitsPerPixel == 32)
+                isMono = false;
+            else
+                System.Diagnostics.Debug.Fail("bmw.Format.BitsPerPixel is " + bm.Format.BitsPerPixel.ToString());
+
+            int scale = isMono ? 1 : 4;
+
+            var srcbuf = new byte[bm.PixelWidth * bm.PixelHeight * scale];
+            bm.CopyPixels(srcbuf, bm.PixelWidth * scale, 0);
 
             Func<int, byte> calcMax = (offset) =>
             {
                 int max = -1;
-                for (int i = offset; i < bm.PixelWidth * bm.PixelHeight * 4; i += 4) max = Math.Max(max, srcbuf[i]);
+                for (int i = offset; i < bm.PixelWidth * bm.PixelHeight * scale; i += scale) max = Math.Max(max, srcbuf[i]);
                 return (byte)max;
             };
-
-            byte maxb = calcMax(0);
-            byte maxg = calcMax(1);
-            byte maxr = calcMax(2);
 
             var bw = new WriteableBitmap(bm.PixelWidth, bm.PixelHeight, 96, 96, PixelFormats.Bgr32, null);
             var dstbuf = new byte[bm.PixelWidth * bm.PixelHeight * 4];
 
-            for (int i = 0; i < bm.PixelWidth * bm.PixelHeight*4; i += 4)
+            if (isMono)
             {
-                if ((maxb - srcbuf[i]) < 16 && (maxg - srcbuf[i + 1]) < 16 && (maxr - srcbuf[i + 2]) < 16)
+                byte maxb = calcMax(0);
+
+                int j = 0;
+                for (int i = 0; i < bm.PixelWidth * bm.PixelHeight; i ++)
                 {
-                    dstbuf[i] = dstbuf[i + 1] = dstbuf[i + 2] = 0xff;
+                    if ((maxb - srcbuf[i]) < 16)
+                    {
+                        dstbuf[j] = dstbuf[j + 1] = dstbuf[j + 2] = 0xff;
+                    }
+                    else
+                    {
+                        dstbuf[j] = dstbuf[j + 1] = dstbuf[j + 2] = 0;
+                    }
+                    dstbuf[j + 3] = 0xff;
+                    j+=4;
                 }
-                else
+            }
+            else
+            {
+                byte maxb = calcMax(0);
+                byte maxg = calcMax(1);
+                byte maxr = calcMax(2);
+
+                for (int i = 0; i < bm.PixelWidth * bm.PixelHeight * 4; i += 4)
                 {
-                    dstbuf[i] = dstbuf[i + 1] = dstbuf[i + 2] = 0;
+                    if ((maxb - srcbuf[i]) < 16 && (maxg - srcbuf[i + 1]) < 16 && (maxr - srcbuf[i + 2]) < 16)
+                    {
+                        dstbuf[i] = dstbuf[i + 1] = dstbuf[i + 2] = 0xff;
+                    }
+                    else
+                    {
+                        dstbuf[i] = dstbuf[i + 1] = dstbuf[i + 2] = 0;
+                    }
+                    dstbuf[i + 3] = 0xff;
                 }
-                dstbuf[i + 3] = 0xff;
             }
             bw.WritePixels(new System.Windows.Int32Rect(0, 0, bm.PixelWidth, bm.PixelHeight), dstbuf, bm.PixelWidth * 4, 0, 0);
             return bw;
