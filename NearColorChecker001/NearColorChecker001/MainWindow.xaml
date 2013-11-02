@@ -8,7 +8,7 @@
             <TextBox Width="200" VerticalAlignment="Top" x:Name="TextBoxTargetFolder">c:\pictures</TextBox>
             <Button Content="..." VerticalAlignment="Top" x:Name="ButtonTargetFolderSelect" Click="ButtonTargetFolderSelect_Click"></Button>
             <TextBlock Text="Trash:"></TextBlock>
-            <TextBox Width="200" VerticalAlignment="Top" x:Name="TextBoxTrashFolder">c:\delme</TextBox>
+            <TextBox Width="200" VerticalAlignment="Top" x:Name="TextBoxTrashFolder">DeleteMe</TextBox>
             <Button Content="..." VerticalAlignment="Top" x:Name="ButtonTrashFolderSelect" Click="ButtonTrashFolderSelect_Click"></Button>
         </StackPanel>
         <ListBox Margin="0,24,0,0" Width="100" HorizontalAlignment="Left" x:Name="ListBoxSelect" SelectionChanged="ListBoxSelect_SelectionChanged">
