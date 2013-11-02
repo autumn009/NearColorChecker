@@ -188,7 +188,10 @@ namespace NearColorChecker001
             bool isFirstItem = false;
             foreach (var item2 in target)
             {
+                var wishToRemoveLVIs = new List<ListViewItem>();
+
                 var lvi = new ListViewItem();
+                wishToRemoveLVIs.Add(lvi);
                 lvi.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
                 //var spf = new StackPanel();
                 //spf.Orientation = Orientation.Horizontal;
@@ -262,6 +265,7 @@ namespace NearColorChecker001
                 ListViewResult.Items.Add(lvi);
 #if DEBUG
                 var lvi2 = new ListViewItem();
+                wishToRemoveLVIs.Add(lvi2);
                 lvi2.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
                 var spf2 = new Grid();
                 spf2.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
@@ -274,6 +278,7 @@ namespace NearColorChecker001
                 ListViewResult.Items.Add(lvi2);
 
                 var lvi3 = new ListViewItem();
+                wishToRemoveLVIs.Add(lvi3);
                 lvi3.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
                 var spf3 = new Grid();
                 spf3.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
@@ -287,6 +292,7 @@ namespace NearColorChecker001
                 ListViewResult.Items.Add(lvi3);
 
                 var lvi4 = new ListViewItem();
+                wishToRemoveLVIs.Add(lvi4);
                 lvi4.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
                 var spf4 = new Grid();
                 spf4.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
@@ -299,6 +305,7 @@ namespace NearColorChecker001
                 ListViewResult.Items.Add(lvi4);
 
                 var lvi5 = new ListViewItem();
+                wishToRemoveLVIs.Add(lvi5);
                 lvi5.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
                 var spf5 = new Grid();
                 spf5.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
@@ -317,7 +324,7 @@ namespace NearColorChecker001
                     {
                         var dstFileNameBase = System.IO.Path.Combine(
                             System.IO.Path.GetPathRoot(TextBoxTargetFolder.Text),
-                            TextBoxTrashFolder.Text, 
+                            TextBoxTrashFolder.Text,
                             System.IO.Path.GetFileName(item2.filename));
                         var dstFileName = dstFileNameBase;
                         int count = 0;
@@ -331,7 +338,7 @@ namespace NearColorChecker001
                         }
                         Directory.CreateDirectory(System.IO.Path.GetDirectoryName(dstFileName));
                         File.Move(item2.filename, dstFileName);
-                        ListViewResult.Items.Remove(lvi);
+                        foreach (var itemLvi in wishToRemoveLVIs) ListViewResult.Items.Remove(itemLvi);
                         var item3 = ListBoxSelect.SelectedItem;
                         if (item3 == null) return;
                         List<PictureInfo> target3 = resultMap.FirstOrDefault(c => c[0] == item3);
