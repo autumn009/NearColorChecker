@@ -120,32 +120,22 @@ namespace NearColorChecker001
         private List<Action> deleteEvents = new List<Action>();
         private void ButtonMove_Click(object sender, RoutedEventArgs e)
         {
-            if (TextBoxTrashFolder.Text.Length > 1
-                && TextBoxTrashFolder.Text.Length > 1
-                && char.ToLower(TextBoxTargetFolder.Text[0]) == char.ToLower(TextBoxTrashFolder.Text[0])
-                && TextBoxTargetFolder.Text[1] == ':'
-                && TextBoxTrashFolder.Text[1] == ':')
+            if (DisableConfirmToDelete.IsChecked != true)
             {
-                if (DisableConfirmToDelete.IsChecked != true)
+                var dstdir = System.IO.Path.Combine(System.IO.Path.GetPathRoot(TextBoxTargetFolder.Text), TextBoxTrashFolder.Text);
+                var r = MessageBox.Show("Are you sure to move checked files to " + dstdir + "?", "NearColorChecker", MessageBoxButton.YesNo);
+                if (r != MessageBoxResult.Yes) return;
+            }
+            foreach (var item in deleteEvents.ToArray()) item();
+            Task.Run(() =>
+            {
+                Task.Delay(1000).Wait();
+                Dispatcher.Invoke(() =>
                 {
-                    var r = MessageBox.Show("Are you sure to move checked files?", "NearColorChecker", MessageBoxButton.YesNo);
-                    if (r != MessageBoxResult.Yes) return;
-                }
-                foreach (var item in deleteEvents.ToArray()) item();
-                Task.Run(() =>
-                {
-                    Task.Delay(1000).Wait();
-                    Dispatcher.Invoke(() =>
-                    {
-                        if (ListBoxSelect.SelectedIndex < ListBoxSelect.Items.Count - 1)
-                            ListBoxSelect.SelectedIndex++;
-                    });
+                    if (ListBoxSelect.SelectedIndex < ListBoxSelect.Items.Count - 1)
+                        ListBoxSelect.SelectedIndex++;
                 });
-            }
-            else
-            {
-                MessageBox.Show("You must specify same drive for two directories", "NearColorChecker");
-            }
+            });
         }
 
         private void ButtonSkip_Click(object sender, RoutedEventArgs e)
@@ -325,7 +315,10 @@ namespace NearColorChecker001
                 {
                     if (chbox.IsChecked == true)
                     {
-                        var dstFileNameBase = System.IO.Path.Combine(TextBoxTrashFolder.Text, System.IO.Path.GetFileName(item2.filename));
+                        var dstFileNameBase = System.IO.Path.Combine(
+                            System.IO.Path.GetPathRoot(TextBoxTargetFolder.Text),
+                            TextBoxTrashFolder.Text, 
+                            System.IO.Path.GetFileName(item2.filename));
                         var dstFileName = dstFileNameBase;
                         int count = 0;
                         while (File.Exists(dstFileName))
@@ -336,6 +329,7 @@ namespace NearColorChecker001
                             dstFileName = System.IO.Path.Combine(dir, name + count.ToString() + ext);
                             count++;
                         }
+                        Directory.CreateDirectory(System.IO.Path.GetDirectoryName(dstFileName));
                         File.Move(item2.filename, dstFileName);
                         ListViewResult.Items.Remove(lvi);
                         var item3 = ListBoxSelect.SelectedItem;
