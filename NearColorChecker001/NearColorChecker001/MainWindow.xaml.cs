@@ -95,6 +95,7 @@ namespace NearColorChecker001
                             ListBoxSelect.Items.Add(item[0]);
                         }
                         wnd.Close();
+                        UpdateItems();
                         this.IsEnabled = true;
                         TextBlockStatus.Text = "Done";
                     });
@@ -107,6 +108,11 @@ namespace NearColorChecker001
                     });
                 }
             });
+        }
+
+        private void UpdateItems()
+        {
+            TextBlockItems.Text = ListBoxSelect.Items.Count.ToString() + " items";
         }
 
         private List<Action> deleteEvents = new List<Action>();
@@ -335,6 +341,7 @@ namespace NearColorChecker001
                         List<PictureInfo> target3 = resultMap.FirstOrDefault(c => c[0] == item3);
                         if (target3 != null) target3.Remove(item2);
                         deleteEvents.Remove(act);
+                        UpdateItems();
                     }
                 };
                 deleteEvents.Add(act);

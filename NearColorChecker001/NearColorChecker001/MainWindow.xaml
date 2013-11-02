@@ -11,7 +11,8 @@
             <TextBox Width="200" VerticalAlignment="Top" x:Name="TextBoxTrashFolder">DeleteMe</TextBox>
             <Button Content="..." VerticalAlignment="Top" x:Name="ButtonTrashFolderSelect" Click="ButtonTrashFolderSelect_Click"></Button>
         </StackPanel>
-        <ListBox Margin="0,24,0,0" Width="100" HorizontalAlignment="Left" x:Name="ListBoxSelect" SelectionChanged="ListBoxSelect_SelectionChanged">
+        <TextBlock TextWrapping="Wrap" Text="ITEMS" VerticalAlignment="Top" Margin="0,24,0,0" Width="100" HorizontalAlignment="Left" x:Name="TextBlockItems"/>
+        <ListBox Margin="0,44,0,0" Width="100" HorizontalAlignment="Left" x:Name="ListBoxSelect" SelectionChanged="ListBoxSelect_SelectionChanged" >
         </ListBox>
         <ListView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Margin="105,24,129,0" x:Name="ListViewResult" SizeChanged="ListViewResult_SizeChanged">
             <ListView.View>
