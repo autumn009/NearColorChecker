@@ -14,9 +14,6 @@
     <Setting Name="FilterString" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="MonoThreshold" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="DiffThreshold" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
