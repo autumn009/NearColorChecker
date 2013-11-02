@@ -31,8 +31,7 @@ namespace NearColorChecker001
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Trash)) TextBoxTrashFolder.Text = Properties.Settings.Default.Trash;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Threshold)) TextBoxThreshold.Text = Properties.Settings.Default.Threshold;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.FilterString)) TextBoxOutputFilter.Text = Properties.Settings.Default.FilterString;
-            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.MonoThreshold)) TextBoxMonoThreathold.Text = Properties.Settings.Default.MonoThreshold;
-            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.DiffThreshold)) TextBoxDiffThreathold.Text = Properties.Settings.Default.MonoThreshold;
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.DiffThreshold)) TextBoxDiffThreathold.Text = Properties.Settings.Default.DiffThreshold;
         }
 
         private List<List<PictureInfo>> resultMap = new List<List<PictureInfo>>();
@@ -44,12 +43,6 @@ namespace NearColorChecker001
             if (!int.TryParse(TextBoxThreshold.Text, out n))
             {
                 MessageBox.Show("Invalid Threshold Value");
-                return;
-            }
-            int monoThreashold;
-            if (!int.TryParse(TextBoxMonoThreathold.Text, out monoThreashold))
-            {
-                MessageBox.Show("Invalid MonoThreshold Value");
                 return;
             }
             int diff;
@@ -95,7 +88,6 @@ namespace NearColorChecker001
                         foreach (var item in resultMap)
 #else
                         foreach (var item in resultMap.Where(c => c.Count() > 1 
-                            && !Util.IsMonoToneAll(c[0], monoThreashold) 
                             && (filter.Length == 0 || c.Any(d => d.filename.Contains(filter))) )
                             )
 #endif
@@ -172,7 +164,6 @@ namespace NearColorChecker001
             Properties.Settings.Default.Trash = TextBoxTrashFolder.Text;
             Properties.Settings.Default.Threshold = TextBoxThreshold.Text;
             Properties.Settings.Default.FilterString = TextBoxOutputFilter.Text;
-            Properties.Settings.Default.MonoThreshold = TextBoxMonoThreathold.Text;
             Properties.Settings.Default.DiffThreshold = TextBoxDiffThreathold.Text;
             Properties.Settings.Default.Save();
         }

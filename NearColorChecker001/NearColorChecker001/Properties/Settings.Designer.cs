@@ -74,18 +74,6 @@ namespace NearColorChecker001.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string MonoThreshold {
-            get {
-                return ((string)(this["MonoThreshold"]));
-            }
-            set {
-                this["MonoThreshold"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string DiffThreshold {
             get {
                 return ((string)(this["DiffThreshold"]));
