@@ -254,17 +254,18 @@ namespace NearColorChecker001
                             //System.Diagnostics.Debug.Write(distance.ToString());
                             //System.Diagnostics.Debug.Write(" ");
                             //System.Diagnostics.Debug.WriteLine(string.Format("{0} {1} {2} {3}={4}", centerX / distanceBaseX, centerY / distanceBaseY, (x * xunit + x0) / distanceBaseX, (y * yunit + y0) / distanceBaseY, distance));
-                            if (stronglevel < 0.0) continue;
-                            if (stronglevel > 1.0) continue;
-                            if (isMono)
+                            if (stronglevel >= 0.0 && stronglevel <= 1.0)
                             {
-                                rsum = gsum = bsum = bsum + (255 - (255 - buf[i]) * stronglevel);
-                            }
-                            else
-                            {
-                                bsum = bsum + (255 - (255 - buf[i]) * stronglevel);
-                                gsum = gsum + (255 - (255 - buf[i + 1]) * stronglevel);
-                                rsum = rsum + (255 - (255 - buf[i + 2]) * stronglevel);
+                                if (isMono)
+                                {
+                                    rsum = gsum = bsum = bsum + (255 - (255 - buf[i]) * stronglevel);
+                                }
+                                else
+                                {
+                                    bsum = bsum + (255 - (255 - buf[i]) * stronglevel);
+                                    gsum = gsum + (255 - (255 - buf[i + 1]) * stronglevel);
+                                    rsum = rsum + (255 - (255 - buf[i + 2]) * stronglevel);
+                                }
                             }
                             i += scale;
                         }
