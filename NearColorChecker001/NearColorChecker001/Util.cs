@@ -343,8 +343,8 @@ namespace NearColorChecker001
             var buf2 = new byte[t2.PixelWidth * t2.PixelHeight * 4];
             t2.CopyPixels(buf2, t2.PixelWidth * 4, 0);
 
-            int diffcount = 16;
-            const int limit = 1;
+            int diffcount = 0;
+            const int limit = 16;
             for (int i = 0; i < t1.PixelWidth * t1.PixelHeight*4; i += 4)
             {
                 if (Math.Abs(buf1[i] - buf2[i]) < limit) continue;
