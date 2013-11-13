@@ -344,7 +344,7 @@ namespace NearColorChecker001
             t2.CopyPixels(buf2, t2.PixelWidth * 4, 0);
 
             int diffcount = 0;
-            const int limit = 16;
+            const int limit = 64;
             for (int i = 0; i < t1.PixelWidth * t1.PixelHeight*4; i += 4)
             {
                 if (Math.Abs(buf1[i] - buf2[i]) < limit) continue;
@@ -369,12 +369,8 @@ namespace NearColorChecker001
                 foreach (var item in map.ToArray())
                 {
                     var t = threshold;
-                    //if (target.width < 200 || target.height < 200 || item.width < 200 || item.height < 200)
-                    //{
-                    //t *= 3; // boost threshold if picture is very small
-                    //}
                     if (!TestThreshold(target.color, item.color, t) || aspectCheck(target, item)) continue;
-                    if (!TestThreshold(target.colorDiff, item.colorDiff, thresholdDiff) && (target.width == item.width && target.height == item.height)) continue;
+                    //if (!TestThreshold(target.colorDiff, item.colorDiff, thresholdDiff) && (target.width == item.width && target.height == item.height)) continue;
                     if (target.width == item.width && target.height == item.height && !exactCheck(target, item)) continue;
                     map.Remove(item);
                     list.Add(item);
