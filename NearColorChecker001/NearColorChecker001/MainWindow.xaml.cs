@@ -182,6 +182,8 @@ namespace NearColorChecker001
             if (item == null) return;
 
             List<PictureInfo> target = resultMap.FirstOrDefault(c => c[0] == item);
+            if (target == null) return;
+
             bool isFirstItem = false;
             foreach (var item2 in target)
             {
