@@ -32,6 +32,7 @@ namespace NearColorChecker001
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Threshold)) TextBoxThreshold.Text = Properties.Settings.Default.Threshold;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.FilterString)) TextBoxOutputFilter.Text = Properties.Settings.Default.FilterString;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.DiffThreshold)) TextBoxDiffThreathold.Text = Properties.Settings.Default.DiffThreshold;
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.WaitTime)) TextBoxWaitMS.Text = Properties.Settings.Default.WaitTime;
         }
 
         private List<List<PictureInfo>> resultMap = new List<List<PictureInfo>>();
@@ -125,9 +126,11 @@ namespace NearColorChecker001
                 if (r != MessageBoxResult.Yes) return;
             }
             foreach (var item in deleteEvents.ToArray()) item();
+            int waitTime;
+            if (!int.TryParse(this.TextBoxWaitMS.Text, out waitTime)) waitTime = 1000;
             Task.Run(() =>
             {
-                Task.Delay(1000).Wait();
+                Task.Delay(waitTime).Wait();
                 Dispatcher.Invoke(() =>
                 {
                     if (ListBoxSelect.SelectedIndex < ListBoxSelect.Items.Count - 1)
@@ -171,6 +174,7 @@ namespace NearColorChecker001
             Properties.Settings.Default.Threshold = TextBoxThreshold.Text;
             Properties.Settings.Default.FilterString = TextBoxOutputFilter.Text;
             Properties.Settings.Default.DiffThreshold = TextBoxDiffThreathold.Text;
+            Properties.Settings.Default.WaitTime = TextBoxWaitMS.Text;
             Properties.Settings.Default.Save();
         }
 
@@ -357,6 +361,11 @@ namespace NearColorChecker001
             MyGridViewColumn.Width = Math.Max(1,ListViewResult.ActualWidth - borderWidth - scrollWidth);
             //ListViewResult.Items.Clear();
             //deleteEvents.Clear();
+        }
+
+        private void ButtonAuto_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
