@@ -180,59 +180,61 @@ namespace NearColorChecker001
 
         private void ListBoxSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ListViewResult.Items.Clear();
-            deleteEvents.Clear();
-            var item = ListBoxSelect.SelectedItem;
-            if (item == null) return;
-
-            List<PictureInfo> target = resultMap.FirstOrDefault(c => c[0] == item);
-            if (target == null) return;
-
-            bool isFirstItem = false;
-            foreach (var item2 in target)
+            try
             {
-                var wishToRemoveLVIs = new List<ListViewItem>();
+                ListViewResult.Items.Clear();
+                deleteEvents.Clear();
+                var item = ListBoxSelect.SelectedItem;
+                if (item == null) return;
 
-                var lvi = new ListViewItem();
-                wishToRemoveLVIs.Add(lvi);
-                lvi.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-                //var spf = new StackPanel();
-                //spf.Orientation = Orientation.Horizontal;
-                var spf = new Grid();
-                spf.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-                var sp = new StackPanel();
-                sp.Orientation = Orientation.Vertical;
-                sp.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-                var chbox = new CheckBox();
-                chbox.IsChecked = isFirstItem;
-                chbox.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-                isFirstItem = true;
-                chbox.Content = string.Format("{0}x{1}", item2.width, item2.height);
-                sp.Children.Add(chbox);
-                var open = new Button();
-                open.Content = "view large";
-                open.Height = 50;
-                open.Click += (sender2, evt) =>
+                List<PictureInfo> target = resultMap.FirstOrDefault(c => c[0] == item);
+                if (target == null) return;
+
+                bool isFirstItem = false;
+                foreach (var item2 in target)
                 {
-                    System.Diagnostics.Process.Start(item2.filename);
-                };
-                open.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-                sp.Children.Add(open);
-                var status = new Button();
-                status.Content = "file info";
-                status.Height = 50;
-                status.Click += (sender2, evt) =>
-                {
-                    System.Diagnostics.Process.Start("explorer.exe", "/select," + item2.filename);
-                };
-                status.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-                sp.Children.Add(status);
-                var nameTextBlock = new TextBlock();
-                nameTextBlock.Text = item2.filename.Substring(TextBoxTargetFolder.Text.Length + 1);
-                nameTextBlock.TextWrapping = TextWrapping.Wrap;
-                nameTextBlock.Width = 100;
-                nameTextBlock.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-                sp.Children.Add(nameTextBlock);
+                    var wishToRemoveLVIs = new List<ListViewItem>();
+
+                    var lvi = new ListViewItem();
+                    wishToRemoveLVIs.Add(lvi);
+                    lvi.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                    //var spf = new StackPanel();
+                    //spf.Orientation = Orientation.Horizontal;
+                    var spf = new Grid();
+                    spf.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                    var sp = new StackPanel();
+                    sp.Orientation = Orientation.Vertical;
+                    sp.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                    var chbox = new CheckBox();
+                    chbox.IsChecked = isFirstItem;
+                    chbox.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                    isFirstItem = true;
+                    chbox.Content = string.Format("{0}x{1}", item2.width, item2.height);
+                    sp.Children.Add(chbox);
+                    var open = new Button();
+                    open.Content = "view large";
+                    open.Height = 50;
+                    open.Click += (sender2, evt) =>
+                    {
+                        System.Diagnostics.Process.Start(item2.filename);
+                    };
+                    open.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                    sp.Children.Add(open);
+                    var status = new Button();
+                    status.Content = "file info";
+                    status.Height = 50;
+                    status.Click += (sender2, evt) =>
+                    {
+                        System.Diagnostics.Process.Start("explorer.exe", "/select," + item2.filename);
+                    };
+                    status.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                    sp.Children.Add(status);
+                    var nameTextBlock = new TextBlock();
+                    nameTextBlock.Text = item2.filename.Substring(TextBoxTargetFolder.Text.Length + 1);
+                    nameTextBlock.TextWrapping = TextWrapping.Wrap;
+                    nameTextBlock.Width = 100;
+                    nameTextBlock.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                    sp.Children.Add(nameTextBlock);
 #if DEBUG
                 var viewmap = new Button();
                 viewmap.Content = "view map";
@@ -252,20 +254,20 @@ namespace NearColorChecker001
                 };
                 sp.Children.Add(viewmap);
 #endif
-                var img = new Image();
-                img.Margin = new Thickness(0, 0, 100, 0);
-                //img.Width = 150;
-                //img.Height = 150;
-                var bm = new BitmapImage();
-                bm.BeginInit();
-                bm.CacheOption = BitmapCacheOption.OnLoad;
-                bm.UriSource = Util.CreateFileUri(item2.filename);
-                bm.EndInit();
-                img.Source = bm;
-                spf.Children.Add(img);
-                spf.Children.Add(sp);
-                lvi.Content = spf;
-                ListViewResult.Items.Add(lvi);
+                    var img = new Image();
+                    img.Margin = new Thickness(0, 0, 100, 0);
+                    //img.Width = 150;
+                    //img.Height = 150;
+                    var bm = new BitmapImage();
+                    bm.BeginInit();
+                    bm.CacheOption = BitmapCacheOption.OnLoad;
+                    bm.UriSource = Util.CreateFileUri(item2.filename);
+                    bm.EndInit();
+                    img.Source = bm;
+                    spf.Children.Add(img);
+                    spf.Children.Add(sp);
+                    lvi.Content = spf;
+                    ListViewResult.Items.Add(lvi);
 #if DEBUG
                 var lvi2 = new ListViewItem();
                 wishToRemoveLVIs.Add(lvi2);
@@ -320,37 +322,42 @@ namespace NearColorChecker001
                 lvi5.Content = spf5;
                 ListViewResult.Items.Add(lvi5);
 #endif
-                Action act = null;
-                act = () =>
-                {
-                    if (chbox.IsChecked == true)
+                    Action act = null;
+                    act = () =>
                     {
-                        var dstFileNameBase = System.IO.Path.Combine(
-                            System.IO.Path.GetPathRoot(TextBoxTargetFolder.Text),
-                            TextBoxTrashFolder.Text,
-                            System.IO.Path.GetFileName(item2.filename));
-                        var dstFileName = dstFileNameBase;
-                        int count = 0;
-                        while (File.Exists(dstFileName))
+                        if (chbox.IsChecked == true)
                         {
-                            var ext = System.IO.Path.GetExtension(dstFileNameBase);
-                            var name = System.IO.Path.GetFileNameWithoutExtension(dstFileName);
-                            var dir = System.IO.Path.GetDirectoryName(dstFileName);
-                            dstFileName = System.IO.Path.Combine(dir, name + count.ToString() + ext);
-                            count++;
+                            var dstFileNameBase = System.IO.Path.Combine(
+                                System.IO.Path.GetPathRoot(TextBoxTargetFolder.Text),
+                                TextBoxTrashFolder.Text,
+                                System.IO.Path.GetFileName(item2.filename));
+                            var dstFileName = dstFileNameBase;
+                            int count = 0;
+                            while (File.Exists(dstFileName))
+                            {
+                                var ext = System.IO.Path.GetExtension(dstFileNameBase);
+                                var name = System.IO.Path.GetFileNameWithoutExtension(dstFileName);
+                                var dir = System.IO.Path.GetDirectoryName(dstFileName);
+                                dstFileName = System.IO.Path.Combine(dir, name + count.ToString() + ext);
+                                count++;
+                            }
+                            Directory.CreateDirectory(System.IO.Path.GetDirectoryName(dstFileName));
+                            File.Move(item2.filename, dstFileName);
+                            foreach (var itemLvi in wishToRemoveLVIs) ListViewResult.Items.Remove(itemLvi);
+                            var item3 = ListBoxSelect.SelectedItem;
+                            if (item3 == null) return;
+                            List<PictureInfo> target3 = resultMap.FirstOrDefault(c => c[0] == item3);
+                            if (target3 != null) target3.Remove(item2);
+                            deleteEvents.Remove(act);
+                            UpdateItems();
                         }
-                        Directory.CreateDirectory(System.IO.Path.GetDirectoryName(dstFileName));
-                        File.Move(item2.filename, dstFileName);
-                        foreach (var itemLvi in wishToRemoveLVIs) ListViewResult.Items.Remove(itemLvi);
-                        var item3 = ListBoxSelect.SelectedItem;
-                        if (item3 == null) return;
-                        List<PictureInfo> target3 = resultMap.FirstOrDefault(c => c[0] == item3);
-                        if (target3 != null) target3.Remove(item2);
-                        deleteEvents.Remove(act);
-                        UpdateItems();
-                    }
-                };
-                deleteEvents.Add(act);
+                    };
+                    deleteEvents.Add(act);
+                }
+            }
+            catch (Exception e2)
+            {
+                TextBlockStatus.Text = e2.ToString();
             }
         }
 
