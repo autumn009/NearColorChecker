@@ -88,12 +88,24 @@ namespace NearColorChecker001
 #if DEBUG && false
                         foreach (var item in resultMap)
 #else
-                        foreach (var item in resultMap.Where(c => c.Count() > 1 
-                            && (filter.Length == 0 || c.Any(d => d.filename.Contains(filter))) )
+                        foreach (var item in resultMap.Where(c => c.Count() > 1
+                            && (filter.Length == 0 || c.Any(d => d.filename.Contains(filter))))
                             )
 #endif
                         {
-                            ListBoxSelect.Items.Add(item[0]);
+                            try
+                            {
+                                ListBoxSelect.Items.Add(item[0]);
+                            }
+                            catch (Exception e3)
+                            {
+                                Dispatcher.Invoke(() =>
+                                {
+                                    var filenames = string.Join(",", item.Select(c => c.filename));
+                                    MessageBox.Show(filenames + " has error: " +
+                                        e3.ToString());
+                                });
+                            }
                         }
                         wnd.Close();
                         UpdateItems();
