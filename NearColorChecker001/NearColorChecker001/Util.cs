@@ -339,25 +339,33 @@ namespace NearColorChecker001
 
         private static bool exactCheck(PictureInfo target1, PictureInfo target2)
         {
-            var t1 = loadBM(target1.filename);
-            var t2 = loadBM(target2.filename);
-            if (t1.Format.BitsPerPixel != 32 || t2.Format.BitsPerPixel != 32) return true;
-            var buf1 = new byte[t1.PixelWidth * t1.PixelHeight * 4];
-            t1.CopyPixels(buf1, t1.PixelWidth * 4, 0);
-            var buf2 = new byte[t2.PixelWidth * t2.PixelHeight * 4];
-            t2.CopyPixels(buf2, t2.PixelWidth * 4, 0);
-
-            int diffcount = 0;
-            const int limit = 64;
-            for (int i = 0; i < t1.PixelWidth * t1.PixelHeight*4; i += 4)
+            try
             {
-                if (Math.Abs(buf1[i] - buf2[i]) < limit) continue;
-                if (Math.Abs(buf1[i + 1] - buf2[i + 1]) < limit) continue;
-                if (Math.Abs(buf1[i + 2] - buf2[i + 2]) < limit) continue;
-                diffcount++;
-            }
+                var t1 = loadBM(target1.filename);
+                var t2 = loadBM(target2.filename);
+                if (t1.Format.BitsPerPixel != 32 || t2.Format.BitsPerPixel != 32) return true;
+                var buf1 = new byte[t1.PixelWidth * t1.PixelHeight * 4];
+                t1.CopyPixels(buf1, t1.PixelWidth * 4, 0);
+                var buf2 = new byte[t2.PixelWidth * t2.PixelHeight * 4];
+                t2.CopyPixels(buf2, t2.PixelWidth * 4, 0);
 
-            return diffcount == 0;
+                int diffcount = 0;
+                const int limit = 64;
+                for (int i = 0; i < t1.PixelWidth * t1.PixelHeight * 4; i += 4)
+                {
+                    if (Math.Abs(buf1[i] - buf2[i]) < limit) continue;
+                    if (Math.Abs(buf1[i + 1] - buf2[i + 1]) < limit) continue;
+                    if (Math.Abs(buf1[i + 2] - buf2[i + 2]) < limit) continue;
+                    diffcount++;
+                }
+
+                return diffcount == 0;
+            }
+            catch (FileFormatException)
+            {
+                // if CopyPixels thorows FileFormatException, assumes as defference
+                return false;
+            }
         }
 
         internal static void PictureSeiri(List<PictureInfo> map, List<List<PictureInfo>> resultMap, int threshold, int thresholdDiff)
