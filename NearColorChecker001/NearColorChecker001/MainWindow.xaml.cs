@@ -82,7 +82,7 @@ namespace NearColorChecker001
                     {
                         TextBlockStatus.Text = "Grouping";
                     });
-                    Util.PictureSeiri(map, resultMap, n, diff );
+                    Util.PictureSeiri(map, resultMap, n, diff);
                     Dispatcher.Invoke(() =>
                     {
 #if DEBUG && false
@@ -137,6 +137,11 @@ namespace NearColorChecker001
                 var r = MessageBox.Show("Are you sure to move checked files to " + dstdir + "?", "NearColorChecker", MessageBoxButton.YesNo);
                 if (r != MessageBoxResult.Yes) return;
             }
+            deleteItSub();
+        }
+
+        private void deleteItSub()
+        {
             foreach (var item in deleteEvents.ToArray()) item();
             int waitTime;
             if (!int.TryParse(this.TextBoxWaitMS.Text, out waitTime)) waitTime = 1000;
@@ -190,12 +195,14 @@ namespace NearColorChecker001
             Properties.Settings.Default.Save();
         }
 
+        private List<CheckBox> allCheckboxes = new List<CheckBox>();
         private void ListBoxSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
                 ListViewResult.Items.Clear();
                 deleteEvents.Clear();
+                allCheckboxes.Clear();
                 var item = ListBoxSelect.SelectedItem;
                 if (item == null) return;
 
@@ -223,6 +230,7 @@ namespace NearColorChecker001
                     isFirstItem = true;
                     chbox.Content = string.Format("{0}x{1}", item2.width, item2.height);
                     sp.Children.Add(chbox);
+                    allCheckboxes.Add(chbox);
                     var open = new Button();
                     open.Content = "view large";
                     open.Height = 50;
@@ -241,6 +249,31 @@ namespace NearColorChecker001
                     };
                     status.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
                     sp.Children.Add(status);
+
+                    var moveHere = new Button();
+                    moveHere.Content = "move largest file here";
+                    moveHere.Height = 50;
+                    moveHere.Click += (sender2, evt) =>
+                    {
+                        var first = allCheckboxes.FirstOrDefault();
+                        if (first == null) return;
+                        var firstItem = target.FirstOrDefault();
+                        if (firstItem == null) return;
+                        var targetPath = System.IO.Path.GetDirectoryName(item2.filename);
+                        var targetFileName = System.IO.Path.GetFileName(firstItem.filename);
+                        var TargetFullPath = System.IO.Path.Combine(targetPath, targetFileName);
+                        first.IsChecked = false;
+                        foreach (var checkbox in allCheckboxes.Skip(1)) checkbox.IsChecked = true;
+                        deleteItSub();
+                        if (TargetFullPath != firstItem.filename)
+                        {
+                            File.Move(firstItem.filename, TargetFullPath);
+                            firstItem.filename = TargetFullPath;
+                        }
+                    };
+                    moveHere.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                    sp.Children.Add(moveHere);
+                    
                     var nameTextBlock = new TextBlock();
                     nameTextBlock.Text = item2.filename.Substring(TextBoxTargetFolder.Text.Length + 1);
                     nameTextBlock.TextWrapping = TextWrapping.Wrap;
@@ -248,23 +281,23 @@ namespace NearColorChecker001
                     nameTextBlock.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
                     sp.Children.Add(nameTextBlock);
 #if DEBUG
-                var viewmap = new Button();
-                viewmap.Content = "view map";
-                viewmap.Click += (sender2, evt) =>
-                {
-                    var sb = new StringBuilder();
-                    for (int y = 0; y < Constants.ColorMapY; y++)
+                    var viewmap = new Button();
+                    viewmap.Content = "view map";
+                    viewmap.Click += (sender2, evt) =>
                     {
-                        for (int x = 0; x < Constants.ColorMapX; x++)
+                        var sb = new StringBuilder();
+                        for (int y = 0; y < Constants.ColorMapY; y++)
                         {
-                            sb.Append(item2.color[x, y]);
-                            sb.Append(",");
+                            for (int x = 0; x < Constants.ColorMapX; x++)
+                            {
+                                sb.Append(item2.color[x, y]);
+                                sb.Append(",");
+                            }
+                            sb.Append("\r\n");
                         }
-                        sb.Append("\r\n");
-                    }
-                    MessageBox.Show(sb.ToString());
-                };
-                sp.Children.Add(viewmap);
+                        MessageBox.Show(sb.ToString());
+                    };
+                    sp.Children.Add(viewmap);
 #endif
                     var img = new Image();
                     img.Margin = new Thickness(0, 0, 100, 0);
@@ -281,58 +314,58 @@ namespace NearColorChecker001
                     lvi.Content = spf;
                     ListViewResult.Items.Add(lvi);
 #if DEBUG
-                var lvi2 = new ListViewItem();
-                wishToRemoveLVIs.Add(lvi2);
-                lvi2.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-                var spf2 = new Grid();
-                spf2.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-                var img2 = new Image();
-                img2.Margin = new Thickness(0, 0, 100, 0);
-                img2.Source = Util.GetMosaicPicture(item2.color);
-                img2.Effect = null;
-                spf2.Children.Add(img2);
-                lvi2.Content = spf2;
-                ListViewResult.Items.Add(lvi2);
+                    var lvi2 = new ListViewItem();
+                    wishToRemoveLVIs.Add(lvi2);
+                    lvi2.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                    var spf2 = new Grid();
+                    spf2.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                    var img2 = new Image();
+                    img2.Margin = new Thickness(0, 0, 100, 0);
+                    img2.Source = Util.GetMosaicPicture(item2.color);
+                    img2.Effect = null;
+                    spf2.Children.Add(img2);
+                    lvi2.Content = spf2;
+                    ListViewResult.Items.Add(lvi2);
 
-                var lvi3 = new ListViewItem();
-                wishToRemoveLVIs.Add(lvi3);
-                lvi3.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-                var spf3 = new Grid();
-                spf3.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-                var img3 = new Image();
-                img3.Margin = new Thickness(0, 0, 100, 0);
-                var bm3 = Util.CreateMono(bm);
-                img3.Source = bm3;
-                img3.Effect = null;
-                spf3.Children.Add(img3);
-                lvi3.Content = spf3;
-                ListViewResult.Items.Add(lvi3);
+                    var lvi3 = new ListViewItem();
+                    wishToRemoveLVIs.Add(lvi3);
+                    lvi3.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                    var spf3 = new Grid();
+                    spf3.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                    var img3 = new Image();
+                    img3.Margin = new Thickness(0, 0, 100, 0);
+                    var bm3 = Util.CreateMono(bm);
+                    img3.Source = bm3;
+                    img3.Effect = null;
+                    spf3.Children.Add(img3);
+                    lvi3.Content = spf3;
+                    ListViewResult.Items.Add(lvi3);
 
-                var lvi4 = new ListViewItem();
-                wishToRemoveLVIs.Add(lvi4);
-                lvi4.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-                var spf4 = new Grid();
-                spf4.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-                var img4 = new Image();
-                img4.Margin = new Thickness(0, 0, 100, 0);
-                img4.Source = Util.CreateDiff(bm3);
-                img4.Effect = null;
-                spf4.Children.Add(img4);
-                lvi4.Content = spf4;
-                ListViewResult.Items.Add(lvi4);
+                    var lvi4 = new ListViewItem();
+                    wishToRemoveLVIs.Add(lvi4);
+                    lvi4.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                    var spf4 = new Grid();
+                    spf4.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                    var img4 = new Image();
+                    img4.Margin = new Thickness(0, 0, 100, 0);
+                    img4.Source = Util.CreateDiff(bm3);
+                    img4.Effect = null;
+                    spf4.Children.Add(img4);
+                    lvi4.Content = spf4;
+                    ListViewResult.Items.Add(lvi4);
 
-                var lvi5 = new ListViewItem();
-                wishToRemoveLVIs.Add(lvi5);
-                lvi5.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-                var spf5 = new Grid();
-                spf5.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-                var img5 = new Image();
-                img5.Margin = new Thickness(0, 0, 100, 0);
-                img5.Source = Util.GetMosaicPicture(item2.colorDiff);
-                img5.Effect = null;
-                spf5.Children.Add(img5);
-                lvi5.Content = spf5;
-                ListViewResult.Items.Add(lvi5);
+                    var lvi5 = new ListViewItem();
+                    wishToRemoveLVIs.Add(lvi5);
+                    lvi5.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                    var spf5 = new Grid();
+                    spf5.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                    var img5 = new Image();
+                    img5.Margin = new Thickness(0, 0, 100, 0);
+                    img5.Source = Util.GetMosaicPicture(item2.colorDiff);
+                    img5.Effect = null;
+                    spf5.Children.Add(img5);
+                    lvi5.Content = spf5;
+                    ListViewResult.Items.Add(lvi5);
 #endif
                     Action act = null;
                     act = () =>
@@ -377,7 +410,7 @@ namespace NearColorChecker001
         {
             var borderWidth = SystemParameters.ResizeFrameVerticalBorderWidth;
             var scrollWidth = SystemParameters.VerticalScrollBarWidth;
-            MyGridViewColumn.Width = Math.Max(1,ListViewResult.ActualWidth - borderWidth - scrollWidth);
+            MyGridViewColumn.Width = Math.Max(1, ListViewResult.ActualWidth - borderWidth - scrollWidth);
             //ListViewResult.Items.Clear();
             //deleteEvents.Clear();
         }
