@@ -47,10 +47,14 @@ namespace NearColorChecker001
     {
         internal static void FileWalker(string root, Action<string> doit)
         {
+#if STOP_PARALLEL
             foreach (var item in Directory.EnumerateFiles(root, "*.jpg", SearchOption.AllDirectories))
             {
                 doit(item);
             }
+#else
+            Parallel.ForEach(Directory.EnumerateFiles(root, "*.jpg", SearchOption.AllDirectories), item => doit(item));
+#endif
         }
 
         private static double calcDistance(double x0, double y0, double x1, double y1)
