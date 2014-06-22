@@ -62,7 +62,7 @@ namespace NearColorChecker001
             {
                 try
                 {
-                    var map = new List<PictureInfo>();
+                    var map = new System.Collections.Concurrent.ConcurrentBag<PictureInfo>();
                     int count = 0;
                     Util.FileWalker(root, (filename) =>
                     {
@@ -82,7 +82,7 @@ namespace NearColorChecker001
                     {
                         TextBlockStatus.Text = "Grouping";
                     });
-                    Util.PictureSeiri(map, resultMap, n, diff);
+                    Util.PictureSeiri(map.ToList(), resultMap, n, diff);
                     Dispatcher.Invoke(() =>
                     {
 #if DEBUG && false
