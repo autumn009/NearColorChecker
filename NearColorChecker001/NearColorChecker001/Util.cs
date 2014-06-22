@@ -375,7 +375,7 @@ namespace NearColorChecker001
                     map.Remove(item);
                     list.Add(item);
                 }
-                resultMap.Add(list.OrderByDescending(c => c.width * c.height).ThenByDescending(c => c.size).ToList());
+                resultMap.Add(list.OrderByDescending(c => c.width * c.height)/*.ThenByDescending(c => c.size)*/.ToList());
             }
         }
 
