@@ -251,7 +251,15 @@ namespace NearColorChecker001
                     sp.Children.Add(status);
 
                     var moveHere = new Button();
-                    moveHere.Content = "move largest file here";
+                    var sp2 = new StackPanel();
+                    sp2.Orientation = Orientation.Vertical;
+                    var t1 = new TextBlock();
+                    t1.Text = "move here";
+                    sp2.Children.Add(t1);
+                    var t2 = new TextBlock();
+                    t2.Text = "largest file";
+                    sp2.Children.Add(t2);
+                    moveHere.Content = sp2;
                     moveHere.Height = 50;
                     moveHere.Click += (sender2, evt) =>
                     {
