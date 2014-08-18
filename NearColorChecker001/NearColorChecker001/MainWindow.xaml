@@ -1,7 +1,7 @@
 ﻿<Window x:Class="NearColorChecker001.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="369" Width="525" Closed="Window_Closed">
+        Title="MainWindow" Height="420" Width="525" Closed="Window_Closed">
     <Grid>
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="Target:"></TextBlock>
@@ -30,6 +30,8 @@
             <TextBox Text="10" Width="80" x:Name="TextBoxDiffThreathold" ></TextBox>
             <TextBlock Text="Output Filter:" ></TextBlock>
             <TextBox Text="" Width="80" x:Name="TextBoxOutputFilter" ></TextBox>
+            <TextBlock Text="Priority Filter:" ></TextBlock>
+            <TextBox Text="" Width="80" x:Name="TextBoxPriorityFilter" ></TextBox>
             <TextBlock Text="Wait Time After Move(ms):" ></TextBlock>
             <TextBox Text="" Width="80" x:Name="TextBoxWaitMS" ></TextBox>
             <TextBlock x:Name="TextBlockStatus" Text="Ready"  TextWrapping="Wrap"></TextBlock>

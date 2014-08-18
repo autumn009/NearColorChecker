@@ -368,7 +368,7 @@ namespace NearColorChecker001
             }
         }
 
-        internal static void PictureSeiri(List<PictureInfo> map, List<List<PictureInfo>> resultMap, int threshold, int thresholdDiff)
+        internal static void PictureSeiri(List<PictureInfo> map, List<List<PictureInfo>> resultMap, int threshold, int thresholdDiff, string priority)
         {
             resultMap.Clear();
             for (; ; )
@@ -387,7 +387,7 @@ namespace NearColorChecker001
                     map.Remove(item);
                     list.Add(item);
                 }
-                resultMap.Add(list.OrderByDescending(c => c.width * c.height)/*.ThenByDescending(c => c.size)*/.ToList());
+                resultMap.Add(list.OrderByDescending(c=>c.filename.Contains(priority)).ThenByDescending(c => c.width * c.height)/*.ThenByDescending(c => c.size)*/.ToList());
             }
         }
 
