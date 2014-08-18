@@ -31,6 +31,7 @@ namespace NearColorChecker001
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Trash)) TextBoxTrashFolder.Text = Properties.Settings.Default.Trash;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Threshold)) TextBoxThreshold.Text = Properties.Settings.Default.Threshold;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.FilterString)) TextBoxOutputFilter.Text = Properties.Settings.Default.FilterString;
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.PriorityString)) TextBoxPriorityFilter.Text = Properties.Settings.Default.PriorityString;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.DiffThreshold)) TextBoxDiffThreathold.Text = Properties.Settings.Default.DiffThreshold;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.WaitTime)) TextBoxWaitMS.Text = Properties.Settings.Default.WaitTime;
         }
@@ -58,6 +59,7 @@ namespace NearColorChecker001
             this.IsEnabled = false;
             ListBoxSelect.Items.Clear();
             string filter = TextBoxOutputFilter.Text;
+            string priority = TextBoxPriorityFilter.Text;
             Task.Run(() =>
             {
                 try
@@ -82,7 +84,7 @@ namespace NearColorChecker001
                     {
                         TextBlockStatus.Text = "Grouping";
                     });
-                    Util.PictureSeiri(map.ToList(), resultMap, n, diff);
+                    Util.PictureSeiri(map.ToList(), resultMap, n, diff, priority);
                     Dispatcher.Invoke(() =>
                     {
 #if DEBUG && false
@@ -190,6 +192,7 @@ namespace NearColorChecker001
             Properties.Settings.Default.Trash = TextBoxTrashFolder.Text;
             Properties.Settings.Default.Threshold = TextBoxThreshold.Text;
             Properties.Settings.Default.FilterString = TextBoxOutputFilter.Text;
+            Properties.Settings.Default.PriorityString = TextBoxPriorityFilter.Text;
             Properties.Settings.Default.DiffThreshold = TextBoxDiffThreathold.Text;
             Properties.Settings.Default.WaitTime = TextBoxWaitMS.Text;
             Properties.Settings.Default.Save();
