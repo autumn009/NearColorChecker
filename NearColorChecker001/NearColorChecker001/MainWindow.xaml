@@ -5,10 +5,10 @@
     <Grid>
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="Target:"></TextBlock>
-            <TextBox Width="200" VerticalAlignment="Top" x:Name="TextBoxTargetFolder">c:\pictures</TextBox>
+            <TextBox Width="200" VerticalAlignment="Top" x:Name="TextBoxTargetFolder" Text="c:\pictures"></TextBox>
             <Button Content="..." VerticalAlignment="Top" x:Name="ButtonTargetFolderSelect" Click="ButtonTargetFolderSelect_Click"></Button>
             <TextBlock Text="Trash:"></TextBlock>
-            <TextBox Width="200" VerticalAlignment="Top" x:Name="TextBoxTrashFolder">DeleteMe</TextBox>
+            <TextBox Width="200" VerticalAlignment="Top" x:Name="TextBoxTrashFolder" Text="DeleteMe"></TextBox>
             <Button Content="..." VerticalAlignment="Top" x:Name="ButtonTrashFolderSelect" Click="ButtonTrashFolderSelect_Click"></Button>
         </StackPanel>
         <TextBlock TextWrapping="Wrap" Text="ITEMS" VerticalAlignment="Top" Margin="0,24,0,0" Width="100" HorizontalAlignment="Left" x:Name="TextBlockItems"/>
