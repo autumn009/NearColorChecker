@@ -1,4 +1,5 @@
-﻿using System;
+﻿//#define STOP_PARALLEL
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -53,7 +54,9 @@ namespace NearColorChecker001
                 doit(item);
             }
 #else
-            Parallel.ForEach(Directory.EnumerateFiles(root, "*.jpg", SearchOption.AllDirectories), item => doit(item));
+            var opt = new ParallelOptions();
+            opt.MaxDegreeOfParallelism = Environment.ProcessorCount;
+            Parallel.ForEach(Directory.EnumerateFiles(root, "*.jpg", SearchOption.AllDirectories), opt, item => doit(item));
 #endif
         }
 
