@@ -68,7 +68,7 @@ namespace NearColorChecker001
         internal static Uri CreateFileUri(string filename)
         {
             //System.Diagnostics.Debug.WriteLine(filename);
-            var uri = new Uri("file:///" + filename.Replace("%", "%25"));
+            var uri = new Uri("file:///" + filename.Replace("%", "%25").Replace("#","%23"));
             //System.Diagnostics.Debug.WriteLine(filename);
             return uri;
         }
