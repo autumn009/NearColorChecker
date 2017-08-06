@@ -67,14 +67,14 @@ namespace NearColorChecker001
 
         internal static Uri CreateFileUri(string filename)
         {
-#if true
+#if false
             var uri = new Uri(filename);
-#else
-            //System.Diagnostics.Debug.WriteLine(filename);
-            var uri = new Uri("file:///" + filename.Replace("%", "%25").Replace("#","%23"));
-            //System.Diagnostics.Debug.WriteLine(filename);
-#endif
             return uri;
+#else
+            // For escaping bug of Uri constructor
+            var uri = new Uri(filename.Replace("%", "*"));
+            return new Uri(uri.AbsoluteUri.Replace("*", "%25"));
+#endif
         }
 
         internal static PictureInfo CalcScore(string filename)
