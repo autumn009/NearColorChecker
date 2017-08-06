@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="NearColorChecker001.exe" version="1.0.0.10" publicKeyToken="cec7ea70aa8402ff" language="neutral" processorArchitecture="msil" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="NearColorChecker001" version="1.0.6427.21903" language="neutral" processorArchitecture="msil" />
+    <commandLine file="NearColorChecker001.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC マニフェスト オプション
+         Windows のユーザー アカウント制御のレベルを変更するには、
+         requestedExecutionLevel ノードを以下のいずれかで置換します。
+
+       <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+       <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+       <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+        下位互換性を保つためにファイルおよびレジストリの仮想化を使用する場合、
+        requestedExecutionLevel ノードを削除します。
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="NearColorChecker001.exe" size="37312">
+      <assemblyIdentity name="NearColorChecker001" version="1.0.6427.21903" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>JhUxW53cLmt4Suc1FAkS8/p4ba2J3PLEoUIAxH7Dca0=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="NearColorChecker001.exe.config" size="1618">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>n6Fjg632d0ihT1/zylVvuLJOQ+sjhPXEtvo2AxVfXZ4=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=PDTOKYO3\autumn" issuerKeyHash="86b1284a966e9cce0d9d986551a8017b729b9dfc" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>7vBh90SRrJYEWVvrQlbTfiMQFP6TAmI0ompNfwjjG2Q=</DigestValue></Reference></SignedInfo><SignatureValue>psfnWAd9Wanfr2wRtvlwM57CrUYw0Ss4kRzVzxMk+lnJkPce2gnaQrlOKqga+3/EAtpMVyLPywOSMSF4+7MV/lUkxdljITRIRTikVA98+yk7SSIfov4w0wifrmulVpngkqA9zXvIXdYcjviyQm0cvitGoL1l5noN4jXY0OAA6kU=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>qJ9SgXBqc/s5DT2m11TYTaYf7Owqj3gI10vk41YptpO58Rdkm6a0FxzLp2vs3kK3Bi/i/kEGweC7xXkoj35qkg+Bb4frNItJ5dpBPUkpZrpYWvhPFNBwMdMfw5IsmHvhwF2mz3yn3W8XCdQSPZvnemdRmJKlYMHW3ErF5RR5gJM=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="641be3087f4d6aa234620293fe1410237ed35642eb5b590496ac9144f761f0ee" Description="" Url=""><as:assemblyIdentity name="NearColorChecker001.exe" version="1.0.0.10" publicKeyToken="cec7ea70aa8402ff" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=PDTOKYO3\autumn</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>eTZyQh9xUbRgAoKvbF1WGOUiMwnzEVd1gBm3w5NpF/Q=</DigestValue></Reference></SignedInfo><SignatureValue>Lcw+QutYmFYVpZHJeM1NIIbtTtSLdo2Wjh72AVKEwqrhrI1QhmAFvEcnGLw2dj8HxZMHUsj++heiT0RiInINNbDYsQkdF5e5zofZh2AnOC4tflDN60ZyNZIHJyc1MaPH9+RRQwpvXwkBuBLXKWI6pCnUW7c/2LFX/TkwtyHNA8E=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>qJ9SgXBqc/s5DT2m11TYTaYf7Owqj3gI10vk41YptpO58Rdkm6a0FxzLp2vs3kK3Bi/i/kEGweC7xXkoj35qkg+Bb4frNItJ5dpBPUkpZrpYWvhPFNBwMdMfw5IsmHvhwF2mz3yn3W8XCdQSPZvnemdRmJKlYMHW3ErF5RR5gJM=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB1TCCAT6gAwIBAgIQKkzRPDUC051NptPxMrsxJDANBgkqhkiG9w0BAQsFADApMScwJQYDVQQDHh4AUABEAFQATwBLAFkATwAzAFwAYQB1AHQAdQBtAG4wHhcNMTYwOTAyMDIwMTU3WhcNMTcwOTAyMDgwMTU3WjApMScwJQYDVQQDHh4AUABEAFQATwBLAFkATwAzAFwAYQB1AHQAdQBtAG4wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAKifUoFwanP7OQ09ptdU2E2mH+zsKo94CNdL5ONWKbaTufEXZJumtBccy6dr7N5CtwYv4v5BBsHgu8V5KI9+apIPgW+H6zSLSeXaQT1JKWa6WFr4TxTQcDHTH8OSLJh74cBdps98p91vFwnUEj2b53pnUZiSpWDB1txKxeUUeYCTAgMBAAEwDQYJKoZIhvcNAQELBQADgYEAhpaX8RTGmyBHGV6264FxqgE+1DCrMm/eotXce9gjcWbpX+R436Zx/67OHn7IFSvy692KBDk6pzmAMRxpEgstQaiDbkxIXx+m8NppI8leXgqKwwINAEL3XjPeaHjAkrlavka8ZIuQvusQUZ8BMRUFhApj8R8maKw/OoVylQG7kbU=</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
