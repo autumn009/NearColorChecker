@@ -59,10 +59,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>272A9E9A2DC5F8D439AA9500BE1E84AA5602546C</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>0216C88B009B2414B55B06A1DE5D9494327BAA7E</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>NearColorChecker001_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>NearColorChecker001_2_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -132,6 +132,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="NearColorChecker001_1_TemporaryKey.pfx" />
+    <None Include="NearColorChecker001_2_TemporaryKey.pfx" />
     <None Include="NearColorChecker001_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
