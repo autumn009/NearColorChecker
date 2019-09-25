@@ -14,6 +14,33 @@ namespace NearColorChecker001
         // ビットマップイメージ作成
         public static BitmapImage CreateImage(string path)
         {
+            try
+            {
+                FileStream stream = File.OpenRead(path);
+                try
+                {
+                    BitmapImage bmpImage = new BitmapImage();
+                    bmpImage.BeginInit();
+                    bmpImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bmpImage.StreamSource = stream;
+                    bmpImage.EndInit();
+                    return bmpImage;
+                }
+                finally {
+                    stream.Close();
+                }
+            }
+            catch(ArgumentException)
+            {
+                return createImageAlter(path);
+            }
+            catch (AggregateException)
+            {
+                return createImageAlter(path);
+            }
+        }
+        private static BitmapImage createImageAlter(string path)
+        {
             BitmapImage result = null;
 
             try
