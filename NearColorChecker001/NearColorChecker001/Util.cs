@@ -83,7 +83,7 @@ namespace NearColorChecker001
             BitmapImage bm;
             try
             {
-                bm = new BitmapImage(CreateFileUri(filename));
+                bm = MyImageUtil.CreateImage(filename);
             }
             catch (NotSupportedException)
             {
@@ -93,7 +93,7 @@ namespace NearColorChecker001
             {
                 return null;
             }
-            bm.CacheOption = BitmapCacheOption.OnLoad;
+            //bm.CacheOption = BitmapCacheOption.OnLoad;
             var pi = new PictureInfo();
             pi.filename = filename;
             pi.width = bm.PixelWidth;
@@ -105,7 +105,7 @@ namespace NearColorChecker001
                 BitmapImage bm2;
                 try
                 {
-                    bm2 = new BitmapImage(CreateFileUri(filename));
+                    bm2 = MyImageUtil.CreateImage(filename);
                 }
                 catch (NotSupportedException)
                 {
@@ -331,7 +331,7 @@ namespace NearColorChecker001
             BitmapImage bm;
             try
             {
-                bm = new BitmapImage(CreateFileUri(filename));
+                bm = MyImageUtil.CreateImage(filename);
             }
             catch (NotSupportedException)
             {

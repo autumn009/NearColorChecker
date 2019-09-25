@@ -314,11 +314,7 @@ namespace NearColorChecker001
                     img.Margin = new Thickness(0, 0, 100, 0);
                     //img.Width = 150;
                     //img.Height = 150;
-                    var bm = new BitmapImage();
-                    bm.BeginInit();
-                    bm.CacheOption = BitmapCacheOption.OnLoad;
-                    bm.UriSource = Util.CreateFileUri(item2.filename);
-                    bm.EndInit();
+                    var bm = MyImageUtil.CreateImage(item2.filename);
                     img.Source = bm;
                     spf.Children.Add(img);
                     spf.Children.Add(sp);
